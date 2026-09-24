@@ -1,0 +1,21 @@
+{
+  "name": "cdtn1-l2-se",
+  "version": "1.0.0",
+  "description": "Buoi 2 - track SE - L2 tiep nhan va phan loai yeu cau bao hanh",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node tests/smoke-test.js"
+  },
+  "keywords": [
+    "cdtn1",
+    "smart-crm",
+    "mekong-mobile",
+    "se"
+  ],
+  "author": "Nguyen Nam Khanh",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
