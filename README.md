@@ -1,23 +1,4 @@
-## 9. Quy trình cập nhật dự án
-Sau mỗi lần sửa code, thực hiện các lệnh sau trong thư mục dự án:
 
-```powershell
-git status
-npm test
-git add .
-git commit -m "feat(ticket): mo ta ngan gon thay doi"
-git push origin main
-```
-
-Thay nội dung commit theo loại thay đổi:
-
-- `feat(...)`: thêm chức năng mới.
-- `fix(...)`: sửa lỗi.
-- `docs(...)`: cập nhật tài liệu.
-- `test(...)`: thêm hoặc sửa kiểm thử.
-- `chore(...)`: cập nhật cấu hình hoặc công cụ.
-
-Ghi chi tiết thay đổi, kết quả kiểm thử và mã commit trong `docs/update-log.md`. Trên GitHub, mở tab **Commits** để xem ghi chú commit, chọn một commit để xem danh sách file và dòng code thay đổi, hoặc mở **History** của từng file để xem lịch sử riêng file đó.
 # Tiếp nhận và phân loại yêu cầu bảo hành
 
 Sinh viên: Nguyễn Nam Khánh - 2374802010222 - Track SE  
@@ -59,11 +40,3 @@ Chạy `npm test` để xác nhận endpoint `/health` hoạt động.
 - [ ] Module tiếp nhận yêu cầu (buổi 8–10)
 - [ ] Module phân công kỹ thuật viên (buổi 10–12)
 
-## 8. Nội dung đã cập nhật
-- Đã tạo repo public và push nhánh `main` lên GitHub.
-- Đã tạo cấu trúc `docs/`, `src/`, `tests/`, `data/`.
-- Đã cấu hình `.gitignore` và `.env.example` theo track SE.
-- Đã tạo endpoint `GET /health` và smoke test chạy thành công.
-- Đã thêm mẫu dữ liệu L2 trong `data/sample/`.
-- Đã thêm khai báo sử dụng AI tại `docs/ai-disclosure.md`.
-- Dữ liệu đầy đủ trong `dataset/` chỉ dùng cục bộ và không commit lên Git.
