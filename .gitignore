@@ -7,3 +7,8 @@ target/
 coverage/
 .vscode/settings.json
 .idea/
+dataset/
+data/raw/
+*.csv
+!data/sample/
+!data/sample/*.csv

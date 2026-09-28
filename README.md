@@ -22,12 +22,19 @@ Biến môi trường: xem `.env.example`
 - `src/`: mã nguồn ứng dụng.
 - `tests/`: kiểm thử smoke test.
 - `docs/`: minh chứng và ghi chú triển khai.
-- `data/`: dữ liệu mẫu hoặc dữ liệu làm việc.
+- `data/sample/`: mẫu dữ liệu nhỏ được commit để kiểm thử.
+- `data/raw/`: dữ liệu gốc cục bộ, không commit.
+- `dataset/`: bộ dữ liệu đầy đủ của case study, chỉ dùng cục bộ.
 
-## 5. Kiểm thử
+## 5. Dữ liệu L2
+Nguồn dữ liệu đầy đủ nằm trong thư mục `dataset/` và được cung cấp từ bộ dữ liệu mô phỏng của case study. Luồng L2 sử dụng chính các tệp `tickets_history.csv`, `ticket_status_log.csv`, `customers_raw.csv`, `issue_categories.csv` và `service_centers.csv`.
+
+Repo chỉ commit các mẫu nhỏ trong `data/sample/`; không commit dữ liệu lớn. Khi cần chạy với dữ liệu đầy đủ, đặt các tệp CSV vào `data/raw/` hoặc dùng trực tiếp từ `dataset/` ở máy cá nhân.
+
+## 6. Kiểm thử
 Chạy `npm test` để xác nhận endpoint `/health` hoạt động.
 
-## 6. Trạng thái hiện tại
+## 7. Trạng thái hiện tại
 - [x] Khởi tạo project, smoke test chạy được (buổi 2)
 - [ ] Module tiếp nhận yêu cầu (buổi 8–10)
 - [ ] Module phân công kỹ thuật viên (buổi 10–12)

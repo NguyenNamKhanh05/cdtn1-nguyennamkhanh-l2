@@ -1,0 +1,101 @@
+﻿ticket_id,ticket_code,customer_id,serial_no,product_id,center_id,issue_desc,category_id,priority,status,technician_id,received_at,due_date,closed_at,is_warranty
+1,BH-000001/2025,14159,SN541017338391,21,5,kh noi cam sac khong vao dien bi tu tuan truoc,3,TRUNG_BINH,DA_PHAN_CONG,31,2025-02-23 12:30,2025-02-26 12:30,,true
+2,BH-000002/2025,22536,SN171793448269,149,2,cáº£m á»©ng chá»— Ä‘Æ°á»£c chá»— khÃ´ng Ä‘Ã£ thá»­ khá»Ÿi Ä‘á»™ng láº¡i khÃ´ng Ä‘Æ°á»£c,1,CAO,DANG_XU_LY,5,2025-09-01 16:15,2025-09-02 16:15,,true
+3,BH-000003/2026,8568,SN353496038427,226,6,khÃ¡ch bÃ¡o mÃ¡y tá»± táº¯t khi cÃ²n 30% pin má»›i bá»‹ 2 ngÃ y nay,2,TRUNG_BINH,DA_DONG,13,2026-08-23 12:15,2026-08-26 12:15,2026-08-26 01:00,true
+4,BH-000004/2024,9206,SN201103205275,244,1,khach hang phan anh camera mo len bi den man bi tu tuan truoc,4,THAP,DA_DONG,20,2024-09-12 10:00,2024-09-17 10:00,2024-09-16 10:53,true
+5,BH-000005/2025,21320,SN667990926428,264,1,khÃ¡ch bÃ¡o mÃ n hÃ¬nh bá»‹ Ã¡m vÃ ng má»™t gÃ³c má»›i bá»‹ 2 ngÃ y nay,1,THAP,HOAN_TAT,20,2025-04-16 16:00,2025-04-21 16:00,,true
+6,BH-000006/2026,8902,SN290183596470,217,5,may bi mÃ n hÃ¬nh Ä‘en khÃ´ng lÃªn Ä‘Ã£ thá»­ khá»Ÿi Ä‘á»™ng láº¡i khÃ´ng Ä‘Æ°á»£c,1,CAO,DA_DONG,24,2026-08-30 16:15,2026-08-31 16:15,2026-08-31 07:52,true
+7,BH-000007/2026,20470,SN304477094250,232,5,Ä‘iá»ƒm cháº¿t trÃªn mÃ n hÃ¬nh xáº£y ra sau khi rÆ¡i,1,CAO,DA_DONG,9,2026-07-11 15:15,2026-07-12 15:15,2026-07-12 10:29,true
+8,BH-000008/2026,32371,SN896712752454,155,2,kh nÃ³i mÃ¡y bá»‹ Ä‘á»• nÆ°á»›c ngá»t vÃ o khÃ´ng sáº¡c Ä‘Æ°á»£c,5,CAO,DA_DONG,30,2026-02-22 09:15,2026-02-23 09:15,2026-02-23 05:13,true
+9,BH-000009/2026,22048,SN263659927827,115,2,may bi sáº¡c ráº¥t cháº­m máº¥t cáº£ Ä‘Ãªm khÃ¡ch chÆ°a tá»«ng sá»­a á»Ÿ Ä‘Ã¢u,3,TRUNG_BINH,DA_PHAN_CONG,8,2026-08-02 11:00,2026-08-05 11:00,,false
+10,BH-000010/2024,764,SN305343545353,159,5,mÃ¡y rung liÃªn tá»¥c khÃ´ng dá»«ng bá»‹ tá»« tuáº§n trÆ°á»›c,6,THAP,DA_DONG,7,2024-12-20 09:00,2024-12-25 09:00,2024-12-24 05:23,false
+11,BH-000011/2025,17568,SN245912506109,304,3,kh nÃ³i chÃ¢n sáº¡c lá»ng pháº£i giá»¯ má»›i sáº¡c Ä‘Æ°á»£c Ä‘Ã£ thá»­ khá»Ÿi Ä‘á»™ng láº¡i khÃ´ng Ä‘Æ°á»£c,3,TRUNG_BINH,DA_DONG,38,2025-10-05 11:45,2025-10-08 11:45,2025-10-06 22:49,true
+12,BH-000012/2026,13456,SN585921672203,240,2,may bi chÃ¢n sáº¡c lá»ng pháº£i giá»¯ má»›i sáº¡c Ä‘Æ°á»£c Ä‘Ã£ thá»­ khá»Ÿi Ä‘á»™ng láº¡i khÃ´ng Ä‘Æ°á»£c,3,TRUNG_BINH,DA_DONG,12,2026-07-24 15:45,2026-07-27 15:45,2026-07-26 23:24,true
+13,BH-000013/2026,14076,SN135342471423,272,2,khach bao may treo logo khong vao duoc he dieu hanh khach chua tung sua o dau,4,THAP,DA_DONG,30,2026-01-07 17:45,2026-01-12 17:45,2026-01-11 07:30,true
+14,BH-000014/2025,191,SN916536567045,128,2,chÃ¢n sáº¡c lá»ng pháº£i giá»¯ má»›i sáº¡c Ä‘Æ°á»£c má»›i bá»‹ 2 ngÃ y nay,3,TRUNG_BINH,DA_DONG,30,2025-06-11 13:30,2025-06-14 13:30,2025-06-13 20:29,true
+15,BH-000015/2026,29399,SN707252617328,296,2,tÃ¬nh tráº¡ng: mÃ n hÃ¬nh xuáº¥t hiá»‡n vá»‡t má»±c loang xáº£y ra sau khi rÆ¡i,1,CAO,DANG_XU_LY,5,2026-02-10 10:45,2026-02-11 10:45,,true
+16,BH-000016/2025,25218,SN820351513625,186,3,tÃ¬nh tráº¡ng: cá»•ng sáº¡c bá»‹ gÃ£y chÃ¢n xáº£y ra sau khi rÆ¡i,3,TRUNG_BINH,DA_DONG,37,2025-06-10 13:15,2025-06-13 13:15,2025-06-11 09:37,true
+17,BH-000017/2026,42899,SN532591791583,222,5,TÃŒNH TRáº NG: PIN Sá»¤T 20% CHá»ˆ SAU VÃ€I PHÃšT Xáº¢Y RA SAU KHI RÆ I,2,TRUNG_BINH,DA_PHAN_CONG,17,2026-05-21 16:30,2026-05-24 16:30,,true
+18,BH-000018/2026,17466,SN752797804681,48,2,khÃ¡ch bÃ¡o sáº¡c vÃ o nhÆ°ng khÃ´ng nháº­n cÃ¡p má»›i bá»‹ 2 ngÃ y nay,3,TRUNG_BINH,DANG_XU_LY,29,2026-05-02 10:00,2026-05-05 10:00,,true
+19,BH-000019/2025,45461,SN749259283611,256,4,khÃ¡ch bÃ¡o pin nÃ³ng báº¥t thÆ°á»ng khi dÃ¹ng Ä‘Ã£ thá»­ khá»Ÿi Ä‘á»™ng láº¡i khÃ´ng Ä‘Æ°á»£c,2,TRUNG_BINH,DA_DONG,2,2025-02-09 14:30,2025-02-12 14:30,2025-02-11 01:58,true
+20,BH-000020/2026,37762,SN319355331102,21,2,KHACH BAO MAY TU KHOI DONG LAI NHIEU LAN TRONG NGAY,4,CAO,DA_DONG,25,2026-08-20 08:30,2026-08-21 08:30,2026-08-21 03:21,true
+21,BH-000021/2026,38483,SN538712975738,221,4,khÃ¡ch bÃ¡o pin nÃ³ng báº¥t thÆ°á»ng khi dÃ¹ng mÃ¡y cÃ²n báº£o hÃ nh,2,TRUNG_BINH,DA_DONG,16,2026-06-25 08:30,2026-06-28 08:30,2026-06-27 10:52,true
+22,BH-000022/2025,15155,SN818541783829,307,1,khÃ¡ch bÃ¡o mÃ n hÃ¬nh bá»‹ sá»c dá»c bá»‹ tá»« tuáº§n trÆ°á»›c,1,TRUNG_BINH,DANG_XU_LY,1,2025-01-26 12:15,2025-01-29 12:15,,true
+23,BH-000023/2026,37710,SN854070001927,119,4,tinh trang: may treo logo khong vao duoc he dieu hanh khach chua tung sua o dau,4,THAP,DA_DONG,16,2026-03-27 09:00,2026-04-01 09:00,2026-03-29 14:22,true
+24,BH-000024/2025,23696,SN246735433143,229,6,MAY BI PIN Sá»¤T 20% CHá»ˆ SAU VÃ€I PHÃšT,2,TRUNG_BINH,DANG_XU_LY,28,2025-07-18 10:00,2025-07-21 10:00,,true
+25,BH-000025/2025,2270,SN168071448098,225,1,khÃ¡ch bÃ¡o pin chai chá»‰ cÃ²n dÃ¹ng Ä‘Æ°á»£c ná»­a ngÃ y Ä‘Ã£ thá»­ khá»Ÿi Ä‘á»™ng láº¡i khÃ´ng Ä‘Æ°á»£c,2,TRUNG_BINH,DA_DONG,1,2025-03-31 08:00,2025-04-03 08:00,2025-04-02 08:36,true
+26,BH-000026/2026,39677,SN834456158762,276,5,khÃ¡ch hÃ ng pháº£n Ã¡nh pin nÃ³ng báº¥t thÆ°á»ng khi dÃ¹ng má»›i bá»‹ 2 ngÃ y nay,2,TRUNG_BINH,DA_DONG,17,2026-03-26 16:30,2026-03-29 16:30,2026-03-29 00:30,false
+27,BH-000027/2026,13949,SN673837901981,218,4,may bi wifi khÃ´ng káº¿t ná»‘i Ä‘Æ°á»£c sau cáº­p nháº­t xáº£y ra sau khi rÆ¡i,4,THAP,DA_DONG,6,2026-05-02 10:30,2026-05-07 10:30,2026-05-03 23:44,false
+28,BH-000028/2026,20928,SN906181244991,144,1,kh noi cong sac bi gay chan moi bi 2 ngay nay,3,THAP,DA_DONG,20,2026-02-14 10:30,2026-02-19 10:30,2026-02-16 14:37,true
+29,BH-000029/2026,4347,SN967586429414,265,6,tÃ¬nh tráº¡ng: cáº¯m sáº¡c khÃ´ng vÃ o Ä‘iá»‡n khÃ¡ch chÆ°a tá»«ng sá»­a á»Ÿ Ä‘Ã¢u,3,CAO,DA_DONG,23,2026-02-22 13:45,2026-02-23 13:45,2026-02-23 17:10,true
+30,BH-000030/2025,50847,SN150066671480,225,6,mÃ¡y rung liÃªn tá»¥c khÃ´ng dá»«ng,6,TRUNG_BINH,DA_DONG,13,2025-10-21 16:00,2025-10-24 16:00,2025-10-23 15:54,true
+31,BH-000031/2025,18990,SN412688321035,226,4,may bi á»©ng dá»¥ng tá»± thoÃ¡t liÃªn tá»¥c khÃ¡ch chÆ°a tá»«ng sá»­a á»Ÿ Ä‘Ã¢u,4,THAP,DA_DONG,6,2025-07-27 13:00,2025-08-01 13:00,2025-07-29 04:51,true
+32,BH-000032/2025,40522,SN859770069905,219,1,khach bao may phong pin can man hinh da thu khoi dong lai khong duoc,2,TRUNG_BINH,DA_DONG,1,2025-11-20 10:45,2025-11-23 10:45,2025-11-21 19:01,true
+33,BH-000033/2025,37402,SN310826262434,29,2,mÃ¡y khÃ´ng giá»¯ Ä‘Æ°á»£c pin qua Ä‘Ãªm,2,TRUNG_BINH,DA_DONG,12,2025-09-16 09:00,2025-09-19 09:00,2025-09-17 17:55,false
+34,BH-000034/2025,39495,SN285048214031,40,4,tinh trang: pin chai chi con dung duoc nua ngay may con bao hanh,2,TRUNG_BINH,DA_DONG,34,2025-07-21 13:15,2025-07-24 13:15,2025-07-23 22:01,true
+35,BH-000035/2026,40657,SN904929853801,81,5,tinh trang: cam sac may nong bat thuong khach chua tung sua o dau,3,TRUNG_BINH,DA_DONG,26,2026-07-28 11:45,2026-07-31 11:45,2026-07-30 17:00,true
+36,BH-000036/2025,18436,SN593784187686,275,6,KHÃCH BÃO MÃY Tá»° KHá»žI Äá»˜NG Láº I NHIá»€U Láº¦N TRONG NGÃ€Y MÃY CÃ’N Báº¢O HÃ€NH,4,TRUNG_BINH,CHO_LINH_KIEN,13,2025-07-08 08:15,2025-07-11 08:15,,true
+37,BH-000037/2025,36164,SN519364773950,2,3,kh nÃ³i mÃ¡y khÃ´ng giá»¯ Ä‘Æ°á»£c pin qua Ä‘Ãªm Ä‘Ã£ thá»­ khá»Ÿi Ä‘á»™ng láº¡i khÃ´ng Ä‘Æ°á»£c,2,TRUNG_BINH,DA_DONG,38,2025-07-12 14:00,2025-07-15 14:00,2025-07-13 16:15,true
+38,BH-000038/2024,3264,SN255974900005,74,6,kh nÃ³i mÃ¡y khÃ´ng giá»¯ Ä‘Æ°á»£c pin qua Ä‘Ãªm xáº£y ra sau khi rÆ¡i,2,TRUNG_BINH,DA_DONG,10,2024-11-04 13:30,2024-11-07 13:30,2024-11-05 07:48,true
+39,BH-000039/2025,682,SN796589954863,276,5,KHÃCH HÃ€NG PHáº¢N ÃNH Sáº C Äáº¦Y NHÆ¯NG DÃ™NG 30 PHÃšT LÃ€ Sáº¬P NGUá»’N Xáº¢Y RA SAU KHI RÆ I,2,TRUNG_BINH,DA_DONG,26,2025-11-20 17:45,2025-11-23 17:45,2025-11-24 16:18,true
+40,BH-000040/2025,21395,SN485643836295,128,2,kh nÃ³i Ä‘iá»ƒm cháº¿t trÃªn mÃ n hÃ¬nh xáº£y ra sau khi rÆ¡i,1,CAO,DA_DONG,25,2025-11-02 09:00,2025-11-03 09:00,2025-11-02 17:38,true
+41,BH-000041/2025,42116,SN368009561485,143,2,khÃ¡ch hÃ ng pháº£n Ã¡nh camera má»Ÿ lÃªn bá»‹ Ä‘en mÃ n mÃ¡y cÃ²n báº£o hÃ nh,4,THAP,DA_DONG,8,2025-08-17 17:30,2025-08-22 17:30,2025-08-21 04:27,true
+42,BH-000042/2024,34792,SN331796869517,147,6,may bi man hinh nut sau khi roi bi tu tuan truoc,1,CAO,DA_DONG,28,2024-11-22 12:00,2024-11-23 12:00,2024-11-22 23:53,true
+43,BH-000043/2025,49691,SN299833263529,82,5,may bi mÃ n hÃ¬nh Ä‘en khÃ´ng lÃªn,1,CAO,DA_DONG,17,2025-01-04 16:30,2025-01-05 16:30,2025-01-05 14:00,false
+44,BH-000044/2026,51304,SN220496885154,30,4,may bi sáº¡c ráº¥t cháº­m máº¥t cáº£ Ä‘Ãªm,3,THAP,DA_PHAN_CONG,6,2026-04-29 17:00,2026-05-04 17:00,,true
+45,BH-000045/2026,6098,SN885083737539,89,4,khÃ¡ch bÃ¡o mÃ¡y vÃ o nÆ°á»›c mÃ n hÃ¬nh loang á»‘,5,CAO,DA_DONG,14,2026-08-31 08:45,2026-09-01 08:45,2026-09-01 05:24,false
+46,BH-000046/2025,43194,SN344744514548,81,1,kh nÃ³i mÃ n hÃ¬nh chá»›p táº¯t liÃªn tá»¥c bá»‹ tá»« tuáº§n trÆ°á»›c,1,CAO,DA_PHAN_CONG,20,2025-08-03 08:45,2025-08-04 08:45,,false
+47,BH-000047/2024,12897,SN588202770012,7,4,may bi may bi do nuoc ngot vao khong sac duoc,5,CAO,DA_DONG,15,2024-12-17 13:45,2024-12-18 13:45,2024-12-18 10:54,false
+48,BH-000048/2026,23064,SN509688173180,33,3,Ä‘iá»ƒm cháº¿t trÃªn mÃ n hÃ¬nh xáº£y ra sau khi rÆ¡i,1,CAO,DA_DONG,22,2026-08-20 10:30,2026-08-21 10:30,2026-08-21 06:09,true
+49,BH-000049/2025,387,SN187069844287,44,4,tÃ¬nh tráº¡ng: mÃ n hÃ¬nh bá»‹ sá»c dá»c xáº£y ra sau khi rÆ¡i,1,CAO,DA_DONG,2,2025-09-28 08:30,2025-09-29 08:30,2025-09-28 23:25,false
+50,BH-000050/2025,51596,SN312922717326,270,1,khÃ¡ch hÃ ng pháº£n Ã¡nh cá»•ng sáº¡c bá»‹ gÃ£y chÃ¢n khÃ¡ch chÆ°a tá»«ng sá»­a á»Ÿ Ä‘Ã¢u,3,TRUNG_BINH,DA_DONG,1,2025-09-26 12:15,2025-09-29 12:15,2025-09-28 22:57,false
+51,BH-000051/2025,34811,SN367173495961,260,4,tÃ¬nh tráº¡ng: mÃ n hÃ¬nh bá»‹ há»Ÿ sÃ¡ng viá»n dÆ°á»›i Ä‘Ã£ thá»­ khá»Ÿi Ä‘á»™ng láº¡i khÃ´ng Ä‘Æ°á»£c,1,CAO,DANG_XU_LY,4,2025-03-13 11:15,2025-03-14 11:15,,true
+52,BH-000052/2025,22091,SN953218523967,12,1,may bi mÃ n hÃ¬nh chá»›p táº¯t liÃªn tá»¥c mÃ¡y cÃ²n báº£o hÃ nh,1,CAO,DA_DONG,20,2025-03-17 14:30,2025-03-18 14:30,2025-03-18 01:26,false
+53,BH-000053/2024,9564,SN156749968872,196,3,dÃ­nh nÆ°á»›c biá»ƒn mÃ¡y nÃ³ng vÃ  táº¯t Ä‘Ã£ thá»­ khá»Ÿi Ä‘á»™ng láº¡i khÃ´ng Ä‘Æ°á»£c,5,CAO,DA_DONG,36,2024-09-02 14:00,2024-09-03 14:00,2024-09-03 04:45,true
+54,BH-000054/2024,47495,SN389869241129,24,1,khÃ¡ch hÃ ng pháº£n Ã¡nh chÃ¢n sáº¡c lá»ng pháº£i giá»¯ má»›i sáº¡c Ä‘Æ°á»£c,3,TRUNG_BINH,DA_DONG,33,2024-12-09 09:45,2024-12-12 09:45,2024-12-11 11:51,true
+55,BH-000055/2026,11782,SN988109636264,211,2,kh nÃ³i mÃ n hÃ¬nh bá»‹ sá»c dá»c khÃ¡ch chÆ°a tá»«ng sá»­a á»Ÿ Ä‘Ã¢u,1,CAO,DA_DONG,25,2026-08-23 09:00,2026-08-24 09:00,2026-08-24 06:03,true
+56,BH-000056/2025,48252,SN210234215479,17,5,khÃ¡ch hÃ ng pháº£n Ã¡nh Ä‘iá»ƒm cháº¿t trÃªn mÃ n hÃ¬nh mÃ¡y cÃ²n báº£o hÃ nh,1,CAO,DA_DONG,17,2025-12-13 12:30,2025-12-14 12:30,2025-12-14 03:01,false
+57,BH-000057/2024,26043,SN242884823773,145,3,camera sau bá»‹ má» nhÆ° cÃ³ sÆ°Æ¡ng xáº£y ra sau khi rÆ¡i,6,TRUNG_BINH,DA_DONG,3,2024-12-23 11:15,2024-12-26 11:15,2024-12-31 01:57,true
+58,BH-000058/2026,48490,SN370637672501,32,4,khÃ¡ch hÃ ng pháº£n Ã¡nh mÃ¡y phá»“ng pin cáº¥n mÃ n hÃ¬nh Ä‘Ã£ thá»­ khá»Ÿi Ä‘á»™ng láº¡i khÃ´ng Ä‘Æ°á»£c,2,THAP,CHO_LINH_KIEN,21,2026-04-23 15:30,2026-04-28 15:30,,true
+59,BH-000059/2025,11478,SN368174521927,298,6,khÃ¡ch hÃ ng pháº£n Ã¡nh mÃ¡y phá»“ng pin cáº¥n mÃ n hÃ¬nh xáº£y ra sau khi rÆ¡i,2,TRUNG_BINH,DA_DONG,10,2025-03-02 16:00,2025-03-05 16:00,2025-03-04 11:01,false
+60,BH-000060/2025,2206,SN415913236220,49,1,khach hang phan anh may phong pin can man hinh moi bi 2 ngay nay,2,TRUNG_BINH,DA_DONG,33,2025-07-10 17:00,2025-07-13 17:00,2025-07-12 07:27,true
+61,BH-000061/2026,13246,SN489708853227,80,4,may bi Ä‘iá»ƒm cháº¿t trÃªn mÃ n hÃ¬nh Ä‘Ã£ thá»­ khá»Ÿi Ä‘á»™ng láº¡i khÃ´ng Ä‘Æ°á»£c,1,TRUNG_BINH,DA_DONG,21,2026-08-26 17:30,2026-08-29 17:30,2026-08-28 11:53,false
+62,BH-000062/2025,29114,SN634340826667,47,2,kh noi pin sut 20% chi sau vai phut may con bao hanh,2,TRUNG_BINH,DA_DONG,8,2025-03-01 10:15,2025-03-04 10:15,2025-03-08 22:14,false
+63,BH-000063/2026,34018,SN928032948926,38,1,kh nÃ³i mÃ¡y tá»± táº¯t khi cÃ²n 30% pin,2,TRUNG_BINH,DA_DONG,20,2026-05-12 11:00,2026-05-15 11:00,2026-05-13 12:37,true
+64,BH-000064/2024,35657,SN801767035106,80,6,tÃ¬nh tráº¡ng: bÃ¡o pin sai pháº§n trÄƒm nháº£y loáº¡n má»›i bá»‹ 2 ngÃ y nay,2,TRUNG_BINH,DA_DONG,13,2024-12-18 09:00,2024-12-21 09:00,2024-12-22 05:27,true
+65,BH-000065/2026,53241,SN195887200324,213,3,mÃ¡y cÃ³ tiáº¿ng kÃªu láº¡ bÃªn trong má»›i bá»‹ 2 ngÃ y nay,6,TRUNG_BINH,DA_DONG,37,2026-01-13 15:45,2026-01-16 15:45,2026-01-16 01:13,true
+66,BH-000066/2025,37445,SN526276205159,299,1,bÃ¡o pin sai pháº§n trÄƒm nháº£y loáº¡n bá»‹ tá»« tuáº§n trÆ°á»›c,2,TRUNG_BINH,DA_DONG,20,2025-08-15 10:45,2025-08-18 10:45,2025-08-16 06:26,true
+67,BH-000067/2025,19549,SN841228185413,41,6,may bi may bi do nuoc ngot vao khong sac duoc da thu khoi dong lai khong duoc,5,CAO,DA_DONG,10,2025-06-21 11:00,2025-06-22 11:00,2025-06-22 04:50,true
+68,BH-000068/2025,52548,SN794375723859,287,5,may bi camera sau bá»‹ má» nhÆ° cÃ³ sÆ°Æ¡ng má»›i bá»‹ 2 ngÃ y nay,6,TRUNG_BINH,DA_DONG,31,2025-08-17 09:45,2025-08-20 09:45,2025-08-18 12:57,true
+69,BH-000069/2025,2695,SN510843458653,293,3,khÃ¡ch hÃ ng pháº£n Ã¡nh sáº¡c Ä‘áº§y nhÆ°ng dÃ¹ng 30 phÃºt lÃ  sáº­p nguá»“n khÃ¡ch chÆ°a tá»«ng sá»­a á»Ÿ Ä‘Ã¢u,2,TRUNG_BINH,HOAN_TAT,32,2025-09-19 16:30,2025-09-22 16:30,,true
+70,BH-000070/2025,38535,SN780540748810,125,3,kh noi loa ngoai re khong nghe ro may con bao hanh,6,TRUNG_BINH,DA_DONG,32,2025-06-27 15:00,2025-06-30 15:00,2025-06-30 03:14,true
+71,BH-000071/2025,21080,SN871217451325,126,1,khÃ¡ch bÃ¡o sáº¡c vÃ o nhÆ°ng khÃ´ng nháº­n cÃ¡p má»›i bá»‹ 2 ngÃ y nay,3,TRUNG_BINH,DA_DONG,33,2025-02-28 15:15,2025-03-03 15:15,2025-03-02 11:39,true
+72,BH-000072/2026,48235,SN229268669489,291,2,khach hang phan anh man hinh nut sau khi roi khach chua tung sua o dau,1,CAO,DA_DONG,29,2026-06-26 08:30,2026-06-27 08:30,2026-06-26 20:22,true
+73,BH-000073/2026,51575,SN416159514466,313,1,TÃŒNH TRáº NG: Cáº®M Sáº C BÃO Lá»–I PHá»¤ KIá»†N MÃY CÃ’N Báº¢O HÃ€NH,3,TRUNG_BINH,DA_DONG,33,2026-06-06 14:30,2026-06-09 14:30,2026-06-13 03:49,false
+74,BH-000074/2026,43437,SN412191562980,253,3,kh noi pin sut 20% chi sau vai phut xay ra sau khi roi,2,TRUNG_BINH,CHO_LINH_KIEN,22,2026-08-22 17:45,2026-08-25 17:45,,true
+75,BH-000075/2025,13415,SN186192270429,190,6,kh nÃ³i mÃ¡y tá»± khá»Ÿi Ä‘á»™ng láº¡i nhiá»u láº§n trong ngÃ y,4,THAP,DA_DONG,13,2025-03-30 10:45,2025-04-04 10:45,2025-04-01 01:06,true
+76,BH-000076/2025,16843,SN805097221389,248,6,kh nÃ³i mÃ n hÃ¬nh ná»©t sau khi rÆ¡i khÃ¡ch chÆ°a tá»«ng sá»­a á»Ÿ Ä‘Ã¢u,1,THAP,DA_DONG,28,2025-10-16 13:45,2025-10-21 13:45,2025-10-19 10:11,true
+77,BH-000077/2025,40072,SN522373187949,136,6,khÃ¡ch hÃ ng pháº£n Ã¡nh cáº£m á»©ng chá»— Ä‘Æ°á»£c chá»— khÃ´ng xáº£y ra sau khi rÆ¡i,1,CAO,HOAN_TAT,28,2025-12-20 12:30,2025-12-21 12:30,,false
+78,BH-000078/2026,50134,SN680949519199,200,3,khach hang phan anh may roi vao nuoc khong len nguon moi bi 2 ngay nay,5,CAO,DA_DONG,36,2026-01-10 09:00,2026-01-11 09:00,2026-01-10 15:50,true
+79,BH-000079/2024,14211,SN806949978985,224,1,KHÃCH BÃO MÃY KHÃ”NG GIá»® ÄÆ¯á»¢C PIN QUA ÄÃŠM Bá»Š Tá»ª TUáº¦N TRÆ¯á»šC,2,TRUNG_BINH,DA_DONG,33,2024-12-27 13:00,2024-12-30 13:00,2024-12-29 23:36,false
+80,BH-000080/2026,25128,SN475582131366,5,1,may bi mÃ n hÃ¬nh bá»‹ sá»c dá»c xáº£y ra sau khi rÆ¡i,1,CAO,DA_DONG,1,2026-01-20 09:30,2026-01-21 09:30,2026-01-21 18:13,true
+81,BH-000081/2025,19481,SN780737262416,208,4,TÃŒNH TRáº NG: MÃ€N HÃŒNH XUáº¤T HIá»†N Vá»†T Má»°C LOANG,1,TRUNG_BINH,DA_DONG,14,2025-05-06 17:15,2025-05-09 17:15,2025-05-09 02:38,true
+82,BH-000082/2026,42267,SN574235565897,44,3,khÃ¡ch hÃ ng pháº£n Ã¡nh pin chai chá»‰ cÃ²n dÃ¹ng Ä‘Æ°á»£c ná»­a ngÃ y má»›i bá»‹ 2 ngÃ y nay,2,TRUNG_BINH,DA_DONG,36,2026-01-20 10:00,2026-01-23 10:00,2026-01-22 03:37,false
+83,BH-000083/2026,22506,SN382490229961,156,1,khÃ¡ch hÃ ng pháº£n Ã¡nh wifi khÃ´ng káº¿t ná»‘i Ä‘Æ°á»£c sau cáº­p nháº­t Ä‘Ã£ thá»­ khá»Ÿi Ä‘á»™ng láº¡i khÃ´ng Ä‘Æ°á»£c,4,CAO,DA_DONG,20,2026-03-24 10:30,2026-03-25 10:30,2026-03-25 00:09,true
+84,BH-000084/2025,12876,SN247238153243,302,5,tÃ¬nh tráº¡ng: cá»•ng sáº¡c bÃ¡m bá»¥i khÃ´ng tiáº¿p xÃºc má»›i bá»‹ 2 ngÃ y nay,3,TRUNG_BINH,DANG_XU_LY,17,2025-03-04 13:45,2025-03-07 13:45,,false
+85,BH-000085/2025,51228,SN974844778287,310,4,may bi mÃ n hÃ¬nh bá»‹ há»Ÿ sÃ¡ng viá»n dÆ°á»›i má»›i bá»‹ 2 ngÃ y nay,1,CAO,DA_DONG,21,2025-11-08 14:45,2025-11-09 14:45,2025-11-09 10:37,true
+86,BH-000086/2025,20388,SN936192469479,195,2,khÃ¡ch hÃ ng pháº£n Ã¡nh pin chai chá»‰ cÃ²n dÃ¹ng Ä‘Æ°á»£c ná»­a ngÃ y xáº£y ra sau khi rÆ¡i,2,TRUNG_BINH,DA_DONG,12,2025-03-06 08:15,2025-03-09 08:15,2025-03-07 13:33,true
+87,BH-000087/2025,17140,SN890529595904,99,1,Ä‘iá»ƒm cháº¿t trÃªn mÃ n hÃ¬nh xáº£y ra sau khi rÆ¡i,1,CAO,DANG_XU_LY,1,2025-12-02 09:45,2025-12-03 09:45,,true
+88,BH-000088/2025,24268,SN904248674653,315,3,may bi mÃ¡y phá»“ng pin cáº¥n mÃ n hÃ¬nh khÃ¡ch chÆ°a tá»«ng sá»­a á»Ÿ Ä‘Ã¢u,2,TRUNG_BINH,DA_DONG,38,2025-06-12 15:45,2025-06-15 15:45,2025-06-15 04:53,false
+89,BH-000089/2025,16075,SN622950242156,124,5,may bi bÃ¡o pin sai pháº§n trÄƒm nháº£y loáº¡n mÃ¡y cÃ²n báº£o hÃ nh,2,TRUNG_BINH,HOAN_TAT,9,2025-12-16 11:30,2025-12-19 11:30,,true
+90,BH-000090/2026,27563,SN255866227404,100,2,KHÃCH HÃ€NG PHáº¢N ÃNH Cáº®M Sáº C BÃO Lá»–I PHá»¤ KIá»†N Xáº¢Y RA SAU KHI RÆ I,3,CAO,DA_DONG,8,2026-07-19 10:30,2026-07-20 10:30,2026-07-20 03:16,true
+91,BH-000091/2025,2342,SN780440906072,186,6,khÃ¡ch bÃ¡o pin sá»¥t 20% chá»‰ sau vÃ i phÃºt bá»‹ tá»« tuáº§n trÆ°á»›c,2,THAP,DA_DONG,23,2025-01-09 08:30,2025-01-14 08:30,2025-01-11 10:22,true
+92,BH-000092/2025,37365,SN490525147388,115,6,tÃ¬nh tráº¡ng: cá»•ng sáº¡c bá»‹ gÃ£y chÃ¢n xáº£y ra sau khi rÆ¡i,3,TRUNG_BINH,DA_DONG,23,2025-02-23 11:15,2025-02-26 11:15,2025-02-25 06:26,true
+93,BH-000093/2026,52582,SN356853569285,247,3,KHÃCH HÃ€NG PHáº¢N ÃNH MÃ€N HÃŒNH CHá»šP Táº®T LIÃŠN Tá»¤C,1,THAP,DA_DONG,37,2026-06-07 09:15,2026-06-12 09:15,2026-06-09 17:16,true
+94,BH-000094/2024,23512,SN841985001538,211,2,khÃ¡ch bÃ¡o Ä‘iá»ƒm cháº¿t trÃªn mÃ n hÃ¬nh,1,CAO,DANG_XU_LY,29,2024-10-18 14:30,2024-10-19 14:30,,false
+95,BH-000095/2025,48627,SN716695166233,117,2,may bi pin nÃ³ng báº¥t thÆ°á»ng khi dÃ¹ng bá»‹ tá»« tuáº§n trÆ°á»›c,2,TRUNG_BINH,DA_DONG,5,2025-05-17 11:15,2025-05-20 11:15,2025-05-21 02:35,true
+96,BH-000096/2026,38846,SN707802312936,51,2,tÃ¬nh tráº¡ng: mÃ¡y treo logo khÃ´ng vÃ o Ä‘Æ°á»£c há»‡ Ä‘iá»u hÃ nh má»›i bá»‹ 2 ngÃ y nay,4,THAP,CHO_LINH_KIEN,30,2026-02-25 14:45,2026-03-02 14:45,,true
+97,BH-000097/2024,37833,SN803455514778,46,6,khach bao pin nong bat thuong khi dung khach chua tung sua o dau,2,THAP,DANG_XU_LY,10,2024-10-10 11:30,2024-10-15 11:30,,true
+98,BH-000098/2025,38531,SN195677388074,301,4,Sáº C Ráº¤T CHáº¬M Máº¤T Cáº¢ ÄÃŠM Bá»Š Tá»ª TUáº¦N TRÆ¯á»šC,3,TRUNG_BINH,DA_DONG,2,2025-03-04 08:30,2025-03-07 08:30,2025-03-05 19:31,false
+99,BH-000099/2025,28412,SN701493881936,88,2,khÃ¡ch hÃ ng pháº£n Ã¡nh cá»•ng sáº¡c bá»‹ gÃ£y chÃ¢n mÃ¡y cÃ²n báº£o hÃ nh,3,TRUNG_BINH,DA_DONG,12,2025-07-01 17:00,2025-07-04 17:00,2025-07-02 22:15,true
+100,BH-000100/2025,15168,SN981335403483,187,4,may bi cá»•ng sáº¡c bÃ¡m bá»¥i khÃ´ng tiáº¿p xÃºc xáº£y ra sau khi rÆ¡i,3,TRUNG_BINH,DA_DONG,2,2025-12-18 08:15,2025-12-21 08:15,2025-12-20 22:40,true
