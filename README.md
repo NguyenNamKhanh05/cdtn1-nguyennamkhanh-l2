@@ -37,6 +37,17 @@ Chạy `npm test` để xác nhận endpoint `/health` hoạt động.
 
 ## 7. Trạng thái hiện tại
 - [x] Khởi tạo project, smoke test chạy được (buổi 2)
+- [x] Hoàn thiện hồ sơ phân tích và thiết kế BT1 cho luồng L2 (buổi 3)
 - [ ] Module tiếp nhận yêu cầu (buổi 8–10)
 - [ ] Module phân công kỹ thuật viên (buổi 10–12)
+
+## 8. Hồ sơ BT1 đã thực hiện
+- SRS rút gọn 6 mục: `docs/srs.md`.
+- API contract theo track SE: `docs/api-contract.md`.
+- Use Case và đặc tả luồng chính/ngoại lệ: `docs/usecase.md`, `docs/usecase.drawio`.
+- Thiết kế kiến trúc và lập luận theo NFR: `docs/architecture.md`, `docs/architecture.drawio`.
+- ERD 6 bảng và SQL DDL skeleton: `docs/erd.drawio`, `docs/schema.sql`.
+- Wireframe 3 màn hình: `docs/wireframe.png`, `docs/wireframe.md`.
+- Phụ lục khai báo AI: `docs/ai-disclosure.md`.
+- Bản Word tổng hợp: `BT1_2374802010222_NguyenNamKhanh.docx`.
 

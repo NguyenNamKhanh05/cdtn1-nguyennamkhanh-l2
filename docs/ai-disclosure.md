@@ -1,15 +1,18 @@
-# Khai báo sử dụng AI
+# Phụ lục khai báo sử dụng công cụ AI
 
-Sinh viên: Nguyễn Nam Khánh  
-MSSV: 2374802010222  
-Luồng nghiệp vụ: L2 - Tiếp nhận và phân loại yêu cầu bảo hành  
-Track: SE
+**Sinh viên:** Nguyễn Nam Khánh  
+**MSSV:** 2374802010222  
+**Luồng:** L2 - Tiếp nhận và phân loại yêu cầu bảo hành  
+**Track:** SE
 
-## 1. Bảng khai báo
+| Công cụ | Dùng vào việc gì | Áp dụng ở phần nào | Đã kiểm chứng thế nào |
+|---|---|---|---|
+| GitHub Copilot/Copilot Chat | Đọc và tóm tắt case study, đề Buổi 2, Buổi 3 và đề BT1; gợi ý phân tích yêu cầu. | Phạm vi L2, User Story, MoSCoW, FR, NFR, quy tắc nghiệp vụ và bảng truy vết trong SRS. | Đối chiếu với PDF Buổi 3, đề BT1 và case study Mekong Mobile; tự đọc lại và chỉnh sửa nội dung. |
+| GitHub Copilot/Copilot Chat | Hỗ trợ tạo mã khung, API contract, DDL và các tài liệu thiết kế. | `src/`, `tests/`, `docs/api-contract.md`, `docs/schema.sql`, `docs/architecture.md`. | Đã chạy `npm test`; smoke test đạt và `GET /health` trả về `{"status":"ok"}`. Đã kiểm tra yêu cầu 4-6 bảng, khóa chính, khóa ngoại và index. |
+| GitHub Copilot/Copilot Chat | Hỗ trợ tạo sơ đồ và wireframe theo yêu cầu BT1. | `docs/usecase.drawio`, `docs/architecture.drawio`, `docs/erd.drawio`, `docs/wireframe.png`. | Kiểm tra sơ đồ có actor, use case, ranh giới hệ thống, quan hệ dữ liệu và 3 màn hình; đối chiếu thuật ngữ với SRS. |
 
-| Công cụ đã sử dụng | Phần sản phẩm có sử dụng AI hỗ trợ |
-|---|---|
-| **GitHub Copilot/Copilot Chat:** đọc và tóm tắt case study, gợi ý phạm vi L2, tạo mã khung Node.js/Express, viết smoke test và hỗ trợ kiểm tra tài liệu. | Phiếu phạm vi buổi 2 và danh sách User Story cho luồng L2; mã khung endpoint `GET /health`; smoke test trong `tests/smoke-test.js`. |
-| **ChatGPT:** hỗ trợ diễn đạt User Story, hướng dẫn cấu trúc repo, `.gitignore`, `.env.example`, README và cách sử dụng dữ liệu mẫu. | Cấu trúc thư mục repo, file cấu hình ban đầu, README, hướng dẫn dữ liệu L2, tài liệu cấu hình môi trường và mẫu dữ liệu nhỏ trong `data/sample/`. |
+**Cam kết:** Tôi xác nhận đã đọc, hiểu và chịu trách nhiệm về toàn bộ nội dung nộp.
 
-
+**Họ tên:** Nguyễn Nam Khánh  
+**MSSV:** 2374802010222  
+**Ngày:** 28/09/2026
