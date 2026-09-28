@@ -38,3 +38,12 @@ Chạy `npm test` để xác nhận endpoint `/health` hoạt động.
 - [x] Khởi tạo project, smoke test chạy được (buổi 2)
 - [ ] Module tiếp nhận yêu cầu (buổi 8–10)
 - [ ] Module phân công kỹ thuật viên (buổi 10–12)
+
+## 8. Nội dung đã cập nhật
+- Đã tạo repo public và push nhánh `main` lên GitHub.
+- Đã tạo cấu trúc `docs/`, `src/`, `tests/`, `data/`.
+- Đã cấu hình `.gitignore` và `.env.example` theo track SE.
+- Đã tạo endpoint `GET /health` và smoke test chạy thành công.
+- Đã thêm mẫu dữ liệu L2 trong `data/sample/`.
+- Đã thêm khai báo sử dụng AI tại `docs/ai-disclosure.md`.
+- Dữ liệu đầy đủ trong `dataset/` chỉ dùng cục bộ và không commit lên Git.
