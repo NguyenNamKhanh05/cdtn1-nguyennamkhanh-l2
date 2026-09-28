@@ -1,27 +1,15 @@
-# Khai bao su dung AI
+# Khai báo sử dụng AI
 
-## Cong cu da su dung
+Sinh viên: Nguyễn Nam Khánh  
+MSSV: 2374802010222  
+Luồng nghiệp vụ: L2 - Tiếp nhận và phân loại yêu cầu bảo hành  
+Track: SE
 
-- **GitHub Copilot:** Ho tro doc va tom tat yeu cau cua case study, goi y pham vi luong L2, tao bo khung Node.js/Express, viet smoke test va soat lai noi dung tai lieu.
-- **ChatGPT/Copilot Chat:** Ho tro dien dat User Story, huong dan cau truc repo, `.gitignore`, `.env.example`, README va cach su dung du lieu mau.
+## 1. Bảng khai báo
 
-## Pham vi su dung
+| Công cụ đã sử dụng | Phần sản phẩm có sử dụng AI hỗ trợ |
+|---|---|
+| **GitHub Copilot/Copilot Chat:** đọc và tóm tắt case study, gợi ý phạm vi L2, tạo mã khung Node.js/Express, viết smoke test và hỗ trợ kiểm tra tài liệu. | Phiếu phạm vi buổi 2 và danh sách User Story cho luồng L2; mã khung endpoint `GET /health`; smoke test trong `tests/smoke-test.js`. |
+| **ChatGPT:** hỗ trợ diễn đạt User Story, hướng dẫn cấu trúc repo, `.gitignore`, `.env.example`, README và cách sử dụng dữ liệu mẫu. | Cấu trúc thư mục repo, file cấu hình ban đầu, README, hướng dẫn dữ liệu L2, tài liệu cấu hình môi trường và mẫu dữ liệu nhỏ trong `data/sample/`. |
 
-AI duoc su dung de ho tro trong:
 
-- Phieu pham vi buoi 2 cho luong L2.
-- Cau truc thu muc va cau hinh repo.
-- Ma khung endpoint `GET /health` va smoke test.
-- Huong dan xu ly bo du lieu mau L2.
-- Soat van phong va cau truc README.
-
-## Kiem chung
-
-- Sinh vien da doc lai va dieu chinh noi dung phu hop voi case study Mekong Mobile.
-- Smoke test da duoc chay bang `npm test` va ket qua: `GET /health` tra ve `{\"status\":\"ok\"}`.
-- Cac file du lieu lon trong `dataset/` khong duoc commit; chi commit mau nho trong `data/sample/`.
-- Sinh vien chiu trach nhiem giai thich, kiem tra va sua moi dong ma trong repo.
-
-## Cam ket
-
-AI chi la cong cu ho tro. Moi quyet dinh ve pham vi, cong nghe, du lieu va ma nguon trong san pham la trach nhiem cua sinh vien.
