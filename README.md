@@ -1,3 +1,23 @@
+## 9. Quy trình cập nhật dự án
+Sau mỗi lần sửa code, thực hiện các lệnh sau trong thư mục dự án:
+
+```powershell
+git status
+npm test
+git add .
+git commit -m "feat(ticket): mo ta ngan gon thay doi"
+git push origin main
+```
+
+Thay nội dung commit theo loại thay đổi:
+
+- `feat(...)`: thêm chức năng mới.
+- `fix(...)`: sửa lỗi.
+- `docs(...)`: cập nhật tài liệu.
+- `test(...)`: thêm hoặc sửa kiểm thử.
+- `chore(...)`: cập nhật cấu hình hoặc công cụ.
+
+Ghi chi tiết thay đổi, kết quả kiểm thử và mã commit trong `docs/update-log.md`. Trên GitHub, mở tab **Commits** để xem ghi chú commit, chọn một commit để xem danh sách file và dòng code thay đổi, hoặc mở **History** của từng file để xem lịch sử riêng file đó.
 # Tiếp nhận và phân loại yêu cầu bảo hành
 
 Sinh viên: Nguyễn Nam Khánh - 2374802010222 - Track SE  
