@@ -1,1 +1,46 @@
-<mxfile host="app.diagrams.net" modified="2026-09-28T00:00:00.000Z" agent="Mozilla/5.0" version="24.7.17"><diagram id="architecture-l2" name="Architecture L2"><mxGraphModel><root><mxCell id="0"/><mxCell id="1" parent="0"/><mxCell id="client" value="Client / Browser\nNhân viên tiếp nhận, Quản lý" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="40" y="180" width="180" height="80" as="geometry"/></mxCell><mxCell id="api" value="Presentation / API\nRoutes, validation, auth" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="290" y="180" width="190" height="80" as="geometry"/></mxCell><mxCell id="service" value="Application Service\nUse case orchestration" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="550" y="180" width="190" height="80" as="geometry"/></mxCell><mxCell id="domain" value="Domain\nQT-01..QT-06, state machine" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="810" y="180" width="190" height="80" as="geometry"/></mxCell><mxCell id="repo" value="Repository\nTransaction, query, index" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="550" y="350" width="190" height="80" as="geometry"/></mxCell><mxCell id="db" value="PostgreSQL 16\n5 bảng L2 + indexes" style="shape=cylinder;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="810" y="350" width="190" height="100" as="geometry"/></mxCell><mxCell id="out" value="Ngoài phạm vi\nKho, CSAT, Marketing, báo cáo toàn công ty, production deployment" style="rounded=1;dashed=1;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="40" y="350" width="350" height="100" as="geometry"/></mxCell><mxCell id="e1" value="HTTP/JSON" style="endArrow=block;html=1;" edge="1" parent="1" source="client" target="api"><mxGeometry relative="1" as="geometry"/></mxCell><mxCell id="e2" value="command/query" style="endArrow=block;html=1;" edge="1" parent="1" source="api" target="service"><mxGeometry relative="1" as="geometry"/></mxCell><mxCell id="e3" value="domain calls" style="endArrow=block;html=1;" edge="1" parent="1" source="service" target="domain"><mxGeometry relative="1" as="geometry"/></mxCell><mxCell id="e4" value="transaction" style="endArrow=block;html=1;" edge="1" parent="1" source="service" target="repo"><mxGeometry relative="1" as="geometry"/></mxCell><mxCell id="e5" value="SQL" style="endArrow=block;html=1;" edge="1" parent="1" source="repo" target="db"><mxGeometry relative="1" as="geometry"/></mxCell></root></mxGraphModel></diagram></mxfile>
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0">
+  <diagram id="architecture-l2" name="Architecture L2">
+    <mxGraphModel dx="1653" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="client" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Client / Browser&lt;div&gt;Nhân viên tiếp nhận, Quản lý&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="240" x="300" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="api" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Presentation / API&lt;div&gt;Routes, validation, auth&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="240" x="300" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="service" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Application Service&lt;div&gt;Use case orchestration&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="240" x="300" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="domain" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Domain Rules&lt;div&gt;QT-01..QT-06, state machine&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="240" x="650" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="repo" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Repository&lt;div&gt;Transaction, query, index&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="240" x="300" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="db" parent="1" style="shape=cylinder;whiteSpace=wrap;html=1;" value="PostgreSQL 16&lt;div&gt;6 bảng L2 + indexes&lt;/div&gt;" vertex="1">
+          <mxGeometry height="90" width="240" x="300" y="510" as="geometry" />
+        </mxCell>
+        <mxCell id="out" parent="1" style="rounded=1;dashed=1;whiteSpace=wrap;html=1;" value="Ngoài phạm vi&lt;div&gt;Kho, CSAT, Marketing, báo cáo toàn công ty, production deployment&lt;/div&gt;" vertex="1">
+          <mxGeometry height="100" width="210" x="30" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="client" style="endArrow=block;html=1;" target="api" value="HTTP/JSON">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="api" style="endArrow=block;html=1;" target="service" value="command/query">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="service" style="endArrow=block;html=1;" target="domain" value="domain calls">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="service" style="endArrow=block;html=1;" target="repo" value="transaction">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="repo" style="endArrow=block;html=1;" target="db" value="SQL">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

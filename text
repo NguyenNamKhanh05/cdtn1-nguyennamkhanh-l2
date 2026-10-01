@@ -1,0 +1,13 @@
+Được dùng AI — với ba điều kiện bắt buộc
+• ĐƯỢC PHÉP dùng ChatGPT, Claude, Copilot, Gemini và các công cụ tương tự để:
+• Giải thích khái niệm, gợi ý cách tiếp cận, tìm lỗi trong mã của mình.
+• Sinh mã khung, mã lặp lại (boilerplate), truy vấn SQL, hàm tiện ích.
+• Soát chính tả và văn phong tài liệu; dịch thuật ngữ.
+• Sinh dữ liệu mẫu để kiểm thử; đề xuất test case.
+• BA ĐIỀU KIỆN BẮT BUỘC — thiếu một điều là vi phạm:
+• KHAI BÁO: ghi trong báo cáo công cụ nào, dùng vào việc gì, ở phần nào của
+sản phẩm.
+• KIỂM CHỨNG: tự chạy, tự đọc lại, tự sửa. Em phải giải thích được từng
+dòng mã mình nộp.
+• CHỊU TRÁCH NHIỆM: mọi lỗi trong sản phẩm là lỗi của em, không phải lỗi
+của AI hãy khai báo theo yêu cầu này tạo một file để lưu dữ liệu khai báo
