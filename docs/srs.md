@@ -22,6 +22,7 @@ Mekong Mobile đang tiếp nhận yêu cầu bảo hành bằng phiếu giấy n
 | Mức ưu tiên | CAO, TRUNG_BINH hoặc THAP; dùng để sinh hạn cam kết. |
 | Hạn cam kết | Thời điểm chậm nhất phải hoàn tất phiếu theo mức ưu tiên. |
 | Trạng thái phiếu | MOI, DA_PHAN_CONG, DANG_XU_LY, CHO_LINH_KIEN, HOAN_TAT, DA_DONG hoặc DA_HUY. |
+| Loại yêu cầu | Loại nghiệp vụ của phiếu; hiện tại mặc định là BAO_HANH, có thể mở rộng thêm DOI_TRA mà không đổi cấu trúc xử lý chính. |
 | Nhân viên tiếp nhận | Người nhập và cập nhật thông tin phiếu tại trung tâm bảo hành. |
 | Quản lý trung tâm | Người theo dõi phiếu và xử lý các trường hợp cần phê duyệt. |
 
@@ -56,6 +57,7 @@ Mekong Mobile đang tiếp nhận yêu cầu bảo hành bằng phiếu giấy n
 | FR3 | Hệ thống phải cho phép tạo phiếu với khách hàng, thiết bị, mô tả lỗi, nhóm sự cố và mức ưu tiên; phiếu mới có mã duy nhất và trạng thái MOI. |
 | FR4 | Hệ thống phải sinh hạn cam kết theo QT-04: CAO 24 giờ, TRUNG_BINH 72 giờ, THAP 120 giờ; việc tính ngày làm việc phải loại Chủ nhật. |
 | FR5 | Hệ thống phải cho phép xem danh sách phiếu theo trạng thái và hạn cam kết, đồng thời ghi mọi chuyển trạng thái vào lịch sử. |
+| FR6 | Hệ thống phải lưu `request_type` với giá trị mặc định `BAO_HANH`; khi mở rộng loại yêu cầu mới, chỉ cần thêm giá trị cấu hình và nhóm sự cố liên quan, không sửa các bảng lịch sử. |
 
 ### Tiêu chí chấp nhận cho các story MUST
 
@@ -72,7 +74,7 @@ Mekong Mobile đang tiếp nhận yêu cầu bảo hành bằng phiếu giấy n
 | NFR1 | Hiệu năng | API tra cứu khách và danh sách phiếu phải trả phản hồi trong dưới 2 giây với 10.000 phiếu và 65.000 khách trên máy phát triển có tối thiểu 8 GB RAM. |
 | NFR2 | Bảo mật | 100% request tới API nghiệp vụ phải được kiểm tra vai trò; nhân viên chỉ được xem dữ liệu trung tâm của mình và số điện thoại phải che 4 số cuối. |
 | NFR3 | Tin cậy | 100% thao tác tạo hoặc chuyển trạng thái phiếu phải nằm trong transaction; không tạo quá một phiếu khi client gửi lại cùng request id. |
-| NFR4 | Bảo trì | Thêm một nhóm sự cố mới chỉ cần thêm một dòng dữ liệu cấu hình, không sửa mã nguồn xử lý và không thay đổi API hiện có. |
+| NFR4 | Bảo trì | Thêm nhóm sự cố hoặc loại yêu cầu mới chỉ cần thêm dữ liệu cấu hình (`issue_category`, `request_type`), không sửa mã nguồn xử lý và không thay đổi API hiện có. |
 
 ## 5. Ràng buộc và quy tắc nghiệp vụ
 
@@ -83,6 +85,7 @@ Mekong Mobile đang tiếp nhận yêu cầu bảo hành bằng phiếu giấy n
 - **QT-06:** Phiếu chỉ chuyển theo vòng đời hợp lệ; mọi lần chuyển phải ghi `ticket_status_log`, không quay lại trạng thái trước.
 - **QT-13:** Không xóa vật lý phiếu, chỉ đánh dấu ngừng sử dụng và giữ lịch sử.
 - **QT-14/QT-15:** Người dùng chỉ xem dữ liệu đúng đơn vị; số điện thoại hiển thị dạng che trừ quản lý và ban giám đốc.
+- **Mở rộng có kiểm soát:** `request_type` hiện nhận `BAO_HANH`; loại `DOI_TRA` là hướng mở rộng tương lai, chưa nằm trong phạm vi hiện thực BT1.
 
 ## 6. Bảng truy vết yêu cầu
 
@@ -93,3 +96,4 @@ Mekong Mobile đang tiếp nhận yêu cầu bảo hành bằng phiếu giấy n
 | FR3 | Tạo phiếu với dữ liệu bắt buộc và trạng thái MOI | US3 | UC3 | MUST | TC05, TC06 |
 | FR4 | Sinh hạn cam kết theo mức ưu tiên | US5 | UC4 | MUST | TC07, TC08 |
 | FR5 | Xem và cập nhật trạng thái kèm lịch sử | US6, US7 | UC5, UC6 | SHOULD | TC09, TC10 |
+| FR6 | Lưu loại yêu cầu để mở rộng nghiệp vụ | US3 | UC3 | SHOULD | TC11 |

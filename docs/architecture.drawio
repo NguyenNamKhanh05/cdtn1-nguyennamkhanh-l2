@@ -4,37 +4,25 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="client" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Client / Browser&lt;div&gt;Nhân viên tiếp nhận, Quản lý&lt;/div&gt;" vertex="1">
-          <mxGeometry height="70" width="240" x="300" y="30" as="geometry" />
+        <mxCell id="client" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;spacingLeft=14;" value="&lt;b&gt;LỚP TRÌNH BÀY&lt;/b&gt;&lt;br&gt;[Trang tiếp nhận]   [Danh sách phiếu]   [Chi tiết phiếu]&lt;br&gt;Controller nhận HTTP/JSON, xác thực và trả mã lỗi; không chứa SQL hoặc quy tắc bảo hành." vertex="1">
+          <mxGeometry height="100" width="650" x="180" y="30" as="geometry" />
         </mxCell>
-        <mxCell id="api" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Presentation / API&lt;div&gt;Routes, validation, auth&lt;/div&gt;" vertex="1">
-          <mxGeometry height="70" width="240" x="300" y="150" as="geometry" />
+        <mxCell id="service" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;spacingLeft=14;" value="&lt;b&gt;LỚP NGHIỆP VỤ (SERVICE)&lt;/b&gt;&lt;br&gt;TicketService - tạo phiếu, kiểm quy tắc bắt buộc&lt;br&gt;ClassifyService - chọn nhóm sự cố và mức ưu tiên&lt;br&gt;WarrantyService - kiểm tra hạn bảo hành, sinh hạn cam kết&lt;br&gt;request_type mở rộng theo cấu hình, không hard-code luồng xử lý&lt;br&gt;&lt;b&gt;TOÀN BỘ QT-01..QT-06 nằm trong lớp này&lt;/b&gt;" vertex="1">
+          <mxGeometry height="150" width="650" x="180" y="190" as="geometry" />
         </mxCell>
-        <mxCell id="service" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Application Service&lt;div&gt;Use case orchestration&lt;/div&gt;" vertex="1">
-          <mxGeometry height="70" width="240" x="300" y="270" as="geometry" />
+        <mxCell id="repo" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;spacingLeft=14;" value="&lt;b&gt;LỚP TRUY CẬP DỮ LIỆU&lt;/b&gt;&lt;br&gt;CustomerRepository   DeviceRepository   TicketRepository&lt;br&gt;IssueCategoryRepository   StatusLogRepository&lt;br&gt;Gọi qua interface Repository; không chứa quy tắc nghiệp vụ." vertex="1">
+          <mxGeometry height="110" width="650" x="180" y="400" as="geometry" />
         </mxCell>
-        <mxCell id="domain" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Domain Rules&lt;div&gt;QT-01..QT-06, state machine&lt;/div&gt;" vertex="1">
-          <mxGeometry height="70" width="240" x="650" y="270" as="geometry" />
-        </mxCell>
-        <mxCell id="repo" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Repository&lt;div&gt;Transaction, query, index&lt;/div&gt;" vertex="1">
-          <mxGeometry height="70" width="240" x="300" y="390" as="geometry" />
-        </mxCell>
-        <mxCell id="db" parent="1" style="shape=cylinder;whiteSpace=wrap;html=1;" value="PostgreSQL 16&lt;div&gt;6 bảng L2 + indexes&lt;/div&gt;" vertex="1">
-          <mxGeometry height="90" width="240" x="300" y="510" as="geometry" />
+        <mxCell id="db" parent="1" style="shape=cylinder;whiteSpace=wrap;html=1;align=left;spacingLeft=14;" value="&lt;b&gt;LỚP LƯU TRỮ - PostgreSQL 16&lt;/b&gt;&lt;br&gt;customer, device, service_center, issue_category,&lt;br&gt;ticket, ticket_status_log&lt;br&gt;PK/FK/UNIQUE/CHECK và index bảo đảm toàn vẹn dữ liệu." vertex="1">
+          <mxGeometry height="120" width="650" x="180" y="570" as="geometry" />
         </mxCell>
         <mxCell id="out" parent="1" style="rounded=1;dashed=1;whiteSpace=wrap;html=1;" value="Ngoài phạm vi&lt;div&gt;Kho, CSAT, Marketing, báo cáo toàn công ty, production deployment&lt;/div&gt;" vertex="1">
-          <mxGeometry height="100" width="210" x="30" y="270" as="geometry" />
+          <mxGeometry height="140" width="230" x="900" y="220" as="geometry" />
         </mxCell>
-        <mxCell id="e1" edge="1" parent="1" source="client" style="endArrow=block;html=1;" target="api" value="HTTP/JSON">
+        <mxCell id="e1" edge="1" parent="1" source="client" style="endArrow=block;html=1;" target="service" value="HTTP + JSON">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e2" edge="1" parent="1" source="api" style="endArrow=block;html=1;" target="service" value="command/query">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e3" edge="1" parent="1" source="service" style="endArrow=block;html=1;" target="domain" value="domain calls">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e4" edge="1" parent="1" source="service" style="endArrow=block;html=1;" target="repo" value="transaction">
+        <mxCell id="e4" edge="1" parent="1" source="service" style="endArrow=block;html=1;" target="repo" value="interface Repository">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="e5" edge="1" parent="1" source="repo" style="endArrow=block;html=1;" target="db" value="SQL">

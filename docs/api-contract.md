@@ -106,6 +106,7 @@ Response thành công sử dụng trường `data`. Response phân trang sử d�
 {
   "customer_id": 14159,
   "device_id": 9001,
+  "request_type": "BAO_HANH",
   "issue_desc": "May khong sac duoc",
   "category_id": 3,
   "priority": "TRUNG_BINH",
@@ -135,6 +136,7 @@ Response thành công sử dụng trường `data`. Response phân trang sử d�
 **Kết quả lỗi:**
 
 - `400 VALIDATION_ERROR`: thiếu hoặc sai khách hàng, thiết bị, mô tả lỗi, nhóm sự cố, mức ưu tiên hoặc trung tâm.
+- `422 INVALID_REQUEST_TYPE`: `request_type` không thuộc danh mục cấu hình (`BAO_HANH`, `DOI_TRA`).
 - `401 UNAUTHORIZED`: chưa đăng nhập.
 - `403 FORBIDDEN`: người dùng không thuộc trung tâm được gửi trong request.
 - `404 RESOURCE_NOT_FOUND`: không tìm thấy khách hàng, thiết bị, nhóm sự cố hoặc trung tâm.
