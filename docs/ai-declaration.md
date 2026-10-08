@@ -15,8 +15,6 @@
 | GitHub Copilot/Copilot Chat | Hỗ trợ gợi ý mô hình dữ liệu và SQL DDL. | `docs/schema.sql`, `docs/erd.drawio`. | Kiểm tra bảng, khóa chính, khóa ngoại, ràng buộc và index; sau đó tự vẽ lại mô hình theo ý tưởng cá nhân. |
 | GitHub Copilot/Copilot Chat | Hỗ trợ gợi ý mô tả Use Case và kiến trúc. | `docs/usecase.md`, `docs/usecase.drawio`, `docs/architecture.md`, `docs/architecture.drawio`. | Đối chiếu và tự chỉnh sửa actor, use case, luồng ngoại lệ, các lớp kiến trúc và NFR. |
 | GitHub Copilot/Copilot Chat | Hỗ trợ gợi ý thiết kế wireframe và dữ liệu mẫu. | `docs/wireframe.md`, `docs/wireframe.drawio`, `docs/wireframe.drawio.png`, `data/sample/`. | Kiểm tra có đủ 3 màn hình và các trường khớp với SRS, API và mô hình dữ liệu; sau đó tự vẽ lại bằng draw.io theo ý tưởng cá nhân. |
-| GitHub Copilot/Copilot Chat | Hỗ trợ rà soát và hoàn thiện phụ lục khai báo sử dụng AI. | `docs/ai-declaration.md` và phụ lục báo cáo BT1. | Đối chiếu nội dung khai báo với các file đã sử dụng, đọc lại và chỉnh sửa trước khi nộp. |
-
 ## Cam kết của sinh viên
 
 Tôi xác nhận đã sử dụng GitHub Copilot/Copilot Chat như một công cụ hỗ trợ trong quá trình phân tích, thiết kế, lập trình và kiểm thử. Công cụ AI được sử dụng để gợi ý, tóm tắt, hỗ trợ viết mã và rà soát tài liệu; tôi không sử dụng kết quả một cách máy móc.
