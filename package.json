@@ -5,7 +5,9 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
-    "test": "node tests/smoke-test.js"
+    "test": "node tests/smoke-test.js && node tests/ticket.service.test.js",
+    "migrate": "node scripts/run-sql.js migrations/001_create_core.sql",
+    "seed": "node scripts/run-sql.js seeds/001_seed_demo.sql"
   },
   "keywords": [
     "cdtn1",
@@ -17,6 +19,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^5.2.1",
+    "pg": "^8.16.3",
     "xlsx": "^0.18.5"
   }
 }
