@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0">
   <diagram id="erd-l2" name="ERD L2">
-    <mxGraphModel dx="1653" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1704" dy="895" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -23,7 +23,7 @@
           <mxGeometry height="170" width="280" x="990" y="370" as="geometry" />
         </mxCell>
         <mxCell id="legend" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;" value="&lt;b&gt;Chú thích ERD&lt;/b&gt;&lt;br&gt;PK: khóa chính&lt;br&gt;FK: khóa ngoại&lt;br&gt;UNIQUE: giá trị duy nhất&lt;br&gt;1:N: một bản ghi liên kết nhiều bản ghi" vertex="1">
-          <mxGeometry height="110" width="240" x="20" y="250" as="geometry" />
+          <mxGeometry height="110" width="240" y="530" as="geometry" />
         </mxCell>
         <mxCell id="r1" edge="1" parent="1" source="customer" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;endArrow=ERone;startArrow=ERmany;html=1;" target="device" value="1:N">
           <mxGeometry relative="1" as="geometry" />
