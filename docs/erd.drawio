@@ -22,6 +22,9 @@
         <mxCell id="log" parent="1" style="shape=swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fontSize=12;whiteSpace=wrap;html=1;" value="&lt;b&gt;ticket_status_log&lt;/b&gt;&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;PK log_id BIGSERIAL&lt;br&gt;FK ticket_id BIGINT&lt;br&gt;from_status, to_status&lt;br&gt;changed_at TIMESTAMP&lt;br&gt;changed_by BIGINT&lt;/div&gt;" vertex="1">
           <mxGeometry height="170" width="280" x="990" y="370" as="geometry" />
         </mxCell>
+        <mxCell id="legend" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingTop=6;spacingLeft=8;" value="&lt;b&gt;Chú thích ERD&lt;/b&gt;&lt;br&gt;PK: khóa chính&lt;br&gt;FK: khóa ngoại&lt;br&gt;UNIQUE: giá trị duy nhất&lt;br&gt;1:N: một bản ghi liên kết nhiều bản ghi" vertex="1">
+          <mxGeometry height="110" width="240" x="20" y="250" as="geometry" />
+        </mxCell>
         <mxCell id="r1" edge="1" parent="1" source="customer" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;endArrow=ERone;startArrow=ERmany;html=1;" target="device" value="1:N">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
