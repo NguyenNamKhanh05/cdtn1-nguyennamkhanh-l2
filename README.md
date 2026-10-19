@@ -1,16 +1,107 @@
-# L2 — Tiếp nhận và phân loại yêu cầu bảo hành
 
-**Sinh viên:** Nguyễn Nam Khánh — 2374802010222 — Track SE
-**Học phần:** Chuyên đề Tốt nghiệp 1, HK1 2026–2027
-**Case study:** Smart CRM — Mekong Mobile
+# Tiếp nhận và phân loại yêu cầu bảo hành
 
-Module này là lõi nghiệp vụ của luồng **L2**: tra cứu khách theo số điện thoại, ghi nhận thiết bị và mô tả lỗi, phân loại nhóm sự cố, sinh hạn cam kết, theo dõi vòng đời phiếu và lưu lịch sử trạng thái.
+Sinh viên: Nguyễn Nam Khánh - 2374802010222 - Track SE  
+Học phần: Chuyên đề Tốt nghiệp 1, HK1 2026-2027  
+Luồng nghiệp vụ: L2 – Tiếp nhận và phân loại yêu cầu bảo hành
+
+> **Cập nhật BT2:** các mục 1–10 bên dưới giữ nguyên nội dung đã nộp ở BT1, riêng **mục 2** và **mục 6** đã cập nhật theo mẫu README track SE. Mục 11 trở đi bổ sung phần hiện thực module và những điểm đã thay đổi khi làm BT2.
+
+## 1. Mục tiêu
+Xây dựng một module nhỏ cho quy trình tiếp nhận bảo hành của Mekong Mobile. Hệ thống giúp tra cứu khách hàng theo số điện thoại, ghi nhận thiết bị và mô tả lỗi, chuẩn hóa phân loại nhóm sự cố, sinh hạn cam kết và theo dõi trạng thái phiếu.
+
+## 2. Yêu cầu môi trường
+
+- Node.js 20 LTS hoặc mới hơn, npm 10
+- Docker Desktop (khuyến nghị) để chạy PostgreSQL 16 trong container, hoặc PostgreSQL 16 cài sẵn trên máy
+- Không cần SQLite: nếu không có Docker, chạy bằng kho dữ liệu bộ nhớ với `CHE_DO_DU_LIEU=memory` (xem mục 11.2)
+- Biến môi trường: xem `.env.example` — `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `PORT`, `CHE_DO_DU_LIEU`
+- Không bắt buộc tạo `.env`: giá trị mặc định trong `src/config/env.js` đã trùng với `docker-compose.yml`, clone về là chạy được
+
+## 3. Hướng dẫn chạy từ đầu
+
+```bash
+npm install
+copy .env.example .env
+npm run migrate
+npm run seed
+npm test
+npm start
+```
+
+Trên macOS/Linux, dùng `cp .env.example .env` thay cho lệnh `copy`. Có thể kiểm tra hệ thống tại `http://localhost:3000/health`.
+
+Các lệnh chính:
+
+- `npm run migrate`: tạo bảng và index từ CSDL trống; migration có thể chạy lại.
+- `npm run seed`: nạp dữ liệu mẫu; seed dùng `ON CONFLICT` để không nhân đôi khi chạy lại.
+- `npm test`: chạy smoke test và ba unit test service.
+- `npm start`: khởi động API.
+
+## 4. Cấu trúc thư mục
+- `src/`: mã nguồn ứng dụng.
+- `src/routes/`: nhận HTTP và dịch lỗi nghiệp vụ sang HTTP.
+- `src/services/`: quy tắc nghiệp vụ QT-03, QT-04, QT-05, QT-09.
+- `src/repositories/`: truy cập dữ liệu; bản bộ nhớ dùng cho demo và unit test.
+- `src/validators/`: kiểm tra kiểu, định dạng và trường bắt buộc.
+- `src/errors/`: lớp lỗi nghiệp vụ dùng chung.
+- `migrations/`: các bước tạo cấu trúc PostgreSQL.
+- `seeds/`: dữ liệu mẫu có thể nạp lại.
+- `tests/`: smoke test và unit test service.
+- `docs/`: minh chứng và ghi chú triển khai.
+- `data/sample/`: mẫu dữ liệu nhỏ được commit để kiểm thử.
+- `data/raw/`: dữ liệu gốc cục bộ, không commit.
+- `dataset/`: bộ dữ liệu đầy đủ của case study, chỉ dùng cục bộ.
+
+## 5. Dữ liệu L2
+Nguồn dữ liệu đầy đủ nằm trong thư mục `dataset/` và được cung cấp từ bộ dữ liệu mô phỏng của case study. Luồng L2 sử dụng chính các tệp `tickets_history.csv`, `ticket_status_log.csv`, `customers_raw.csv`, `issue_categories.csv` và `service_centers.csv`.
+
+Repo chỉ commit các mẫu nhỏ trong `data/sample/`; không commit dữ liệu lớn. Khi cần chạy với dữ liệu đầy đủ, đặt các tệp CSV vào `data/raw/` hoặc dùng trực tiếp từ `dataset/` ở máy cá nhân.
+
+## 6. Trạng thái hiện tại (buổi 8)
+
+- [x] Migration `tickets`, `customers`, `devices`, `ticket_status_log`, `service_centers`, `issue_categories`, `technician`
+- [x] CRUD `/tickets`, `/customers` qua routes/services/repositories
+- [x] QT-09 không thuộc luồng L2 — thay bằng **QD-01** (một thiết bị không có hai phiếu đang mở)
+- [x] 13/13 test đạt: smoke test + TC-01..TC-13 (`npm test`)
+- [x] Docker Compose + `npm run setup` một lệnh, chạy lại an toàn
+- [ ] Ảnh minh chứng Postman trong `docs/export/` — đang chụp theo `docs/huong-dan-postman.md`
+
+## 7. Kiểm thử
+
+`npm test` chạy ba loại kiểm thử service:
+
+- `TC-01`: luồng đúng, thiết bị còn bảo hành tạo được phiếu.
+- `TC-02`: giá trị biên, ngày cuối còn bảo hành và ngày kế tiếp hết hạn.
+- `TC-03`: dữ liệu sai, serial đã có phiếu mở bị từ chối theo QT-09.
+
+## 8. Lộ trình các buổi
+- [x] Khởi tạo project, smoke test chạy được (buổi 2)
+- [x] Hoàn thiện hồ sơ phân tích và thiết kế BT1 cho luồng L2 (buổi 3)
+- [x] Module tiếp nhận yêu cầu (buổi 8–10)
+- [ ] Module phân công kỹ thuật viên (buổi 10–12)
+
+## 9. Hồ sơ BT1 đã thực hiện
+- SRS rút gọn 6 mục: `docs/srs.md`.
+- API contract theo track SE: `docs/api-contract.md`.
+- Use Case và đặc tả luồng chính/ngoại lệ: `docs/usecase.md`, `docs/usecase.drawio`.
+- Thiết kế kiến trúc và lập luận theo NFR: `docs/architecture.md`, `docs/architecture.drawio`.
+- ERD 6 bảng và SQL DDL skeleton: `docs/erd.drawio`, `docs/schema.sql`.
+- Wireframe 3 màn hình: `docs/export/wireframe.drawio.png`, `docs/wireframe.md`.
+- Phụ lục khai báo AI: `docs/ai-disclosure.md`, `docs/ai-disclosure.xlsx`.
+- Bản Word tổng hợp: `BT1_2374802010222_NguyenNamKhanh.docx`.
+
+## 10. Cấu trúc module BT2
+
+Routes chỉ xử lý HTTP và gọi Service. Service chứa quy tắc nghiệp vụ, không biết `req`, `res` hoặc mã HTTP. Repository chỉ đọc và ghi dữ liệu. Validator kiểm tra định dạng trước khi vào Service; PostgreSQL tiếp tục bảo vệ dữ liệu bằng `NOT NULL`, `UNIQUE`, khóa ngoại và `CHECK`.
 
 ---
 
-## 1. Chạy thử trong 4 lệnh
+# PHẦN BỔ SUNG CHO BT2
 
-Yêu cầu duy nhất: **Node.js ≥ 20** và **Docker Desktop** đang chạy.
+## 11. Chạy nhanh sau khi clone (khuyến nghị)
+
+Yêu cầu: **Node.js ≥ 20** và **Docker Desktop** đang chạy.
 
 ```bash
 npm install
@@ -21,13 +112,21 @@ npm run demo      # terminal khác: chạy 14 kịch bản và in kết quả
 
 `npm run setup` làm ba việc, chạy lại nhiều lần vẫn an toàn:
 
-1. `docker compose up -d` — bật container `mekong_mobile_db` (PostgreSQL 16).
+1. `npm run db:up` — bật container `mekong_mobile_db` (PostgreSQL 16) ở cổng 5434.
 2. Chờ tới khi CSDL nhận kết nối (tối đa 30 giây) rồi chạy migration.
 3. Nạp danh mục và 3 phiếu demo.
 
-Không cần tạo `.env`: mọi giá trị mặc định trong `src/config/env.js` đã trùng với `docker-compose.yml`.
+### 11.1. Điểm khác so với mục 2–4 (giữ nguyên bản BT1 ở trên)
 
-### Không có Docker?
+| Nội dung ở mục 1–10 | Khi làm BT2 |
+|---|---|
+| `copy .env.example .env` là bắt buộc | **Không bắt buộc**: giá trị mặc định trong `src/config/env.js` đã trùng `docker-compose.yml` |
+| Dùng PostgreSQL cài sẵn | Dùng PostgreSQL 16 trong Docker, cổng **5434** để không đụng 5432/5433 |
+| `npm test` chạy ba unit test | `npm test` chạy smoke test + **TC-01..TC-13** |
+| QT-09 xử lý trùng phiếu | **QD-01** là quy định bổ sung; QT-09 thuộc luồng kho (L5), không thuộc L2 |
+| Chỉ có endpoint khách hàng/phiếu | Bổ sung thiết bị, danh mục, lịch sử trạng thái |
+
+### 11.2. Không có Docker?
 
 Chạy bằng kho dữ liệu trong bộ nhớ — đủ để xem toàn bộ API hoạt động:
 
@@ -39,23 +138,7 @@ CHE_DO_DU_LIEU=memory npm start
 
 Trên PowerShell: `$env:CHE_DO_DU_LIEU="memory"; npm start`.
 
----
-
-## 2. Kiểm tra nhanh
-
-```bash
-curl http://localhost:3000/health
-# {"status":"ok","database":"postgresql","connected":true}
-
-curl http://localhost:3000/tickets
-# 3 phiếu BH-000001/2026 .. BH-000003/2026, meta.total = 3
-```
-
-Hướng dẫn chi tiết từng request kèm ảnh chụp: [`docs/huong-dan-postman.md`](docs/huong-dan-postman.md).
-
----
-
-## 3. Bản đồ quy tắc nghiệp vụ → mã nguồn
+## 12. Bản đồ quy tắc nghiệp vụ → mã nguồn
 
 | Mã | Nội dung | Nơi hiện thực |
 |---|---|---|
@@ -72,9 +155,7 @@ Hướng dẫn chi tiết từng request kèm ảnh chụp: [`docs/huong-dan-pos
 
 > QT-07…QT-12 thuộc các luồng L4/L5/L8/L9 (kho linh kiện, phân công, báo cáo) nên **không** nằm trong phạm vi L2.
 
----
-
-## 4. Kiến trúc ba lớp
+## 13. Kiến trúc ba lớp
 
 ```
 HTTP request
@@ -105,11 +186,18 @@ tests/                         smoke test + TC-01..TC-13
 docs/                          hồ sơ BT1 và minh chứng BT2
 ```
 
----
-
-## 5. Danh sách endpoint
+## 14. Danh sách endpoint đầy đủ
 
 Tất cả endpoint có cả hai tiền tố `/api/v1/...` và đường dẫn gốc `/...` để tiện gõ thử.
+
+Ví dụ nhanh (đường dẫn rút gọn, tương đương mục "API demo" của bản BT1):
+
+- `GET /health`: kiểm tra hệ thống.
+- `GET /api/v1/customers?phone=0901234567`: tra cứu khách hàng.
+- `POST /api/v1/customers`: tạo khách hàng.
+- `POST /api/v1/tickets`: tiếp nhận thiết bị và tạo phiếu.
+- `GET/PUT/DELETE /api/v1/customers/:customerId`: CRUD khách hàng.
+- `GET/PUT/DELETE /api/v1/tickets/:ticketId`: CRUD phiếu.
 
 | Method | Path | Mục đích |
 |---|---|---|
@@ -132,7 +220,7 @@ Tất cả endpoint có cả hai tiền tố `/api/v1/...` và đường dẫn g
 | GET | `/devices/:id` | Xem thiết bị |
 | POST | `/devices` | Ghi nhận thiết bị mới (QT-03) |
 
-### Phân quyền tạm thời bằng header
+### 14.1. Phân quyền tạm thời bằng header
 
 Chưa có module đăng nhập, nên QT-14/QT-15 đọc vai trò từ header. Khi có JWT chỉ cần thay hàm `docNguCanh` trong `src/middleware/ngu-canh.js`.
 
@@ -141,9 +229,7 @@ Chưa có module đăng nhập, nên QT-14/QT-15 đọc vai trò từ header. Kh
 | `X-User-Role` | `nhan_vien` (mặc định) \| `quan_ly` \| `ban_giam_doc` | Vai trò người dùng |
 | `X-Center-Id` | số | Trung tâm của nhân viên |
 
----
-
-## 6. Kiểm thử
+## 15. Kiểm thử chi tiết
 
 ```bash
 npm test
@@ -167,14 +253,12 @@ npm test
 | TC-12 | Số điện thoại trùng không tạo hồ sơ mới (QT-01) |
 | TC-13 | Thiếu ngày mua ⇒ chưa xác minh bảo hành (QT-05) |
 
----
-
-## 7. Xử lý sự cố
+## 16. Xử lý sự cố
 
 | Hiện tượng | Nguyên nhân thường gặp | Cách xử lý |
 |---|---|---|
 | `npm run setup` báo không kết nối được PostgreSQL | Docker Desktop chưa chạy | Mở Docker Desktop, đợi biểu tượng hết xoay, chạy lại |
-| `port is already allocated` | Cổng 5434 đã bị chiếm | Sửa `DB_PORT` trong `.env`, hoặc `docker compose down` |
+| `port is already allocated` | Cổng 5434 đã bị chiếm | Sửa `DB_PORT` trong `.env`, hoặc `npm run db:down` |
 | `database "mekong_mobile" does not exist` | Volume cũ từ lần cấu hình trước | `npm run db:reset` rồi `npm run setup` |
 | `ECONNREFUSED ::1:5434` | Node ưu tiên IPv6 | Đổi `DB_HOST=127.0.0.1` trong `.env` |
 | `Cannot find module 'express'` | Chưa cài gói | `npm install` |
@@ -187,26 +271,22 @@ npm run db:reset   # xóa volume và tạo lại container
 npm run setup
 ```
 
----
-
-## 8. Vì sao cổng 5434?
+## 17. Vì sao cổng 5434?
 
 Máy phát triển đã có PostgreSQL ở 5432 và một dịch vụ PostgreSQL 15 ở 5433. Dùng 5434 để container của đồ án không đụng dịch vụ sẵn có. Muốn đổi thì sửa `DB_PORT` trong `.env` — `docker-compose.yml` và `src/config/env.js` đều đọc biến này.
 
----
+## 18. Hướng dẫn kiểm thử Postman
 
-## 9. Hồ sơ BT1
+Xem `docs/huong-dan-postman.md`: 16 request cụ thể kèm mã HTTP, body mong đợi và tên ảnh chụp cần lưu trong `docs/export/`.
 
-- SRS rút gọn: [`docs/srs.md`](docs/srs.md)
-- API contract: [`docs/api-contract.md`](docs/api-contract.md)
-- Use Case: [`docs/usecase.md`](docs/usecase.md), [`docs/usecase.drawio`](docs/usecase.drawio)
-- Kiến trúc: [`docs/architecture.md`](docs/architecture.md), [`docs/architecture.drawio`](docs/architecture.drawio)
-- ERD và DDL: [`docs/erd.drawio`](docs/erd.drawio), [`docs/schema.sql`](docs/schema.sql)
-- Wireframe: [`docs/wireframe.md`](docs/wireframe.md), [`docs/export/wireframe.drawio.png`](docs/export/wireframe.drawio.png)
-- Khai báo AI: [`docs/ai-disclosure.md`](docs/ai-disclosure.md), [`docs/ai-disclosure.xlsx`](docs/ai-disclosure.xlsx)
-- Nhật ký thay đổi thiết kế: [`docs/thay-doi-thiet-ke.md`](docs/thay-doi-thiet-ke.md)
-- Bản Word tổng hợp: `BT1_2374802010222_NguyenNamKhanh.docx`
+Các ảnh tối thiểu:
 
-## 10. Dữ liệu
+1. `postman-01-health.png` — 200, `connected: true`
+2. `postman-02-danh-sach-phieu.png` — 3 phiếu, `total: 3`
+3. `postman-07-du-lieu-sai-400.png` — 400 `DU_LIEU_KHONG_HOP_LE`
+4. `postman-04-khach-hang-che-so.png` — `090123****`
+5. `postman-11-chuyen-trang-thai.png` — 200, `from_status` → `to_status`
+
+## 19. Dữ liệu
 
 Bộ dữ liệu đầy đủ nằm ở `dataset/` (không commit vì dung lượng lớn). Repo chỉ commit mẫu nhỏ trong `data/sample/` — đủ để `npm run setup` chạy trên máy chỉ clone repo. Script `scripts/seed-catalog.js` tự chọn `dataset/` nếu có, ngược lại dùng `data/sample/`.
