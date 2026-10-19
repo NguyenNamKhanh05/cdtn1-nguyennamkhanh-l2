@@ -1,4 +1,4 @@
-﻿log_id,ticket_id,from_status,to_status,changed_at,changed_by,note
+log_id,ticket_id,from_status,to_status,changed_at,changed_by,note
 1,1,,MOI,2025-02-23 12:30,3,
 2,1,MOI,DA_PHAN_CONG,2025-02-25 15:28,8,
 3,2,,MOI,2025-09-01 16:15,43,
