@@ -82,8 +82,8 @@ Repo chỉ commit các mẫu nhỏ trong `data/sample/`; không commit dữ li�
 - Use Case và đặc tả luồng chính/ngoại lệ: `docs/usecase.md`, `docs/usecase.drawio`.
 - Thiết kế kiến trúc và lập luận theo NFR: `docs/architecture.md`, `docs/architecture.drawio`.
 - ERD 6 bảng và SQL DDL skeleton: `docs/erd.drawio`, `docs/schema.sql`.
-- Wireframe 3 màn hình: `docs/wireframe.png`, `docs/wireframe.md`.
-- Phụ lục khai báo AI: `docs/ai-declaration.md`.
+- Wireframe 3 màn hình: `docs/export/wireframe.drawio.png`, `docs/wireframe.md`.
+- Phụ lục khai báo AI: `docs/ai-disclosure.md`, `docs/ai-disclosure.xlsx`.
 - Bản Word tổng hợp: `BT1_2374802010222_NguyenNamKhanh.docx`.
 
 ## 10. Cấu trúc module BT2
