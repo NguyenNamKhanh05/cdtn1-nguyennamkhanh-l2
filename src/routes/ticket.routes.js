@@ -1,71 +1,193 @@
 const express = require('express');
-const { kiemTraTiepNhan } = require('../validators/ticket.validator');
+const { kiemTraTiepNhan, kiemTraBoLoc, kiemTraChuyenTrangThai } = require('../validators/ticket.validator');
+const { coTheXemTrungTam } = require('../middleware/ngu-canh');
 
-const MA_HTTP = {
-  DU_LIEU_KHONG_HOP_LE: 400,
-  KHACH_KHONG_TON_TAI: 404,
-  THIET_BI_KHONG_TON_TAI: 404,
-  THIET_BI_KHONG_THUOC_KHACH: 409,
-  PHIEU_DANG_MO: 409,
-  UU_TIEN_KHONG_HOP_LE: 400,
-};
+/**
+ * Route phiếu bảo hành.
+ *
+ * Vì sao route mỏng: route chỉ làm ba việc — kiểm tra hình thức, gọi Service,
+ * dịch mã lỗi nghiệp vụ sang HTTP. Nếu route tự quyết định quy tắc thì quy tắc
+ * bị trùng lặp giữa các endpoint và không test được nếu không dựng HTTP server.
+ *
+ * Bảng mã lỗi -> HTTP nằm ở hàm `guiLoi`, là nơi DUY NHẤT ánh xạ lỗi.
+ */
 
-// Routes chi dich HTTP sang loi nghiep vu, khong tu quyet dinh quy tac.
+/**
+ * Dịch một AppError thành response HTTP tương ứng.
+ *
+ * @param {import('express').Response} res
+ * @param {Error & {code?: string, chiTiet?: *}} loi Lỗi do Service ném ra.
+ * @returns {import('express').Response|null} Response đã gửi, hoặc null nếu
+ *   lỗi không thuộc danh sách đã biết (khi đó middleware lỗi xử lý thành 500).
+ */
+function guiLoi(res, loi) {
+  const fields = Array.isArray(loi.chiTiet) ? loi.chiTiet : undefined;
+
+  // 400: dữ liệu người dùng gửi sai định dạng hoặc vi phạm quy tắc nghiệp vụ
+  // kiểm tra được ngay (không cần đọc thêm dữ liệu khác).
+  if (loi.code === 'DU_LIEU_KHONG_HOP_LE') {
+    return res.status(400).json({
+      error: { code: 'DU_LIEU_KHONG_HOP_LE', message: loi.message, fields },
+    });
+  }
+  if (loi.code === 'CHUYEN_TRANG_THAI_KHONG_HOP_LE' || loi.code === 'TRANG_THAI_KHONG_HOP_LE') {
+    return res.status(400).json({ error: { code: 'INVALID_TRANSITION', message: loi.message, fields } });
+  }
+  if (loi.code === 'UU_TIEN_KHONG_HOP_LE') {
+    return res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: loi.message } });
+  }
+
+  // 404: tài nguyên được tham chiếu không tồn tại.
+  if (loi.code === 'KHACH_KHONG_TON_TAI' || loi.code === 'THIET_BI_KHONG_TON_TAI'
+    || loi.code === 'NHOM_SU_CO_KHONG_TON_TAI' || loi.code === 'TRUNG_TAM_KHONG_TON_TAI'
+    || loi.code === 'PHIEU_KHONG_TON_TAI') {
+    return res.status(404).json({ error: { code: 'RESOURCE_NOT_FOUND', message: loi.message } });
+  }
+
+  // 409: dữ liệu hợp lệ nhưng xung đột với trạng thái hiện tại của hệ thống.
+  if (loi.code === 'THIET_BI_KHONG_THUOC_KHACH' || loi.code === 'PHIEU_DANG_MO'
+    || loi.code === 'TRANG_THAI_DA_THAY_DOI' || loi.code === 'KHONG_DUOC_XOA_PHIEU') {
+    return res.status(409).json({ error: { code: loi.code, message: loi.message } });
+  }
+
+  return null;
+}
+
+/**
+ * Tạo router cho các endpoint phiếu.
+ *
+ * @param {import('../services/ticket.service').DichVuPhieu} dichVuPhieu Service phiếu.
+ * @returns {import('express').Router}
+ */
 function taoRoutePhieu(dichVuPhieu) {
   const router = express.Router();
 
+  /**
+   * POST /tickets — tạo phiếu (US3, US4, US5).
+   * Trả 201 khi tạo mới, 200 khi request_id đã được xử lý trước đó (NFR4).
+   */
   router.post('/tickets', async (req, res, next) => {
     try {
       const duLieu = kiemTraTiepNhan(req.body);
       const phieu = await dichVuPhieu.taoPhieu(duLieu);
-      res.status(201).json({ data: phieu });
+      const maHttp = phieu.la_phieu_cu ? 200 : 201;
+      return res.status(maHttp).json({ data: phieu });
     } catch (loi) {
-      if (loi.code && MA_HTTP[loi.code]) {
-        return res.status(MA_HTTP[loi.code]).json({
-          error: loi.code,
-          message: loi.message,
-          chi_tiet: loi.chiTiet,
-        });
-      }
+      const daGui = guiLoi(res, loi);
+      if (daGui) return daGui;
       return next(loi);
     }
   });
 
+  /**
+   * GET /tickets — danh sách phiếu có lọc và phân trang (US6, UC5).
+   * QT-14 được áp ở đây: nhân viên bị giới hạn theo trung tâm của mình.
+   */
   router.get('/tickets', async (req, res, next) => {
     try {
-      const phieus = await dichVuPhieu.lietKePhieu();
-      return res.json({ data: phieus, meta: { total: phieus.length } });
+      const boLoc = kiemTraBoLoc(req.query);
+      const nguCanh = req.nguCanh || {};
+
+      // QT-14: nhân viên chỉ xem trung tâm mình. Nếu họ yêu cầu trung tâm khác
+      // thì trả 403 thay vì âm thầm đổi điều kiện lọc — im lặng sẽ khiến người
+      // dùng tưởng dữ liệu trống.
+      if (nguCanh.vaiTro === 'nhan_vien' && nguCanh.centerId !== null) {
+        if (boLoc.centerId && boLoc.centerId !== nguCanh.centerId) {
+          return res.status(403).json({
+            error: { code: 'FORBIDDEN', message: 'Bạn không thuộc trung tâm được yêu cầu.' },
+          });
+        }
+        boLoc.centerId = nguCanh.centerId;
+      }
+
+      const { rows, total } = await dichVuPhieu.lietKePhieu(boLoc);
+      return res.json({
+        data: rows,
+        meta: { page: boLoc.page, page_size: boLoc.pageSize, total },
+      });
     } catch (loi) {
+      const daGui = guiLoi(res, loi);
+      if (daGui) return daGui;
       return next(loi);
     }
   });
 
+  /**
+   * GET /tickets/:ticketId — chi tiết phiếu (US6).
+   * QT-14: không được xem phiếu của trung tâm khác.
+   */
   router.get('/tickets/:ticketId', async (req, res, next) => {
     try {
       const phieu = await dichVuPhieu.timPhieuTheoId(Number(req.params.ticketId));
+      if (!coTheXemTrungTam(req.nguCanh || {}, phieu.center_id)) {
+        return res.status(403).json({
+          error: { code: 'FORBIDDEN', message: 'Bạn không thuộc trung tâm của phiếu này.' },
+        });
+      }
       return res.json({ data: phieu });
     } catch (loi) {
-      if (loi.code === 'PHIEU_KHONG_TON_TAI') return res.status(404).json({ error: loi.code, message: loi.message });
+      const daGui = guiLoi(res, loi);
+      if (daGui) return daGui;
       return next(loi);
     }
   });
 
+  /**
+   * GET /tickets/:ticketId/history — lịch sử trạng thái (UC6).
+   */
+  router.get('/tickets/:ticketId/history', async (req, res, next) => {
+    try {
+      const lichSu = await dichVuPhieu.lichSuTrangThai(Number(req.params.ticketId));
+      return res.json({ data: lichSu });
+    } catch (loi) {
+      const daGui = guiLoi(res, loi);
+      if (daGui) return daGui;
+      return next(loi);
+    }
+  });
+
+  /**
+   * POST /tickets/:ticketId/transitions — chuyển trạng thái (US7, QT-06).
+   * Dùng POST vì đây là hành động tạo một bản ghi lịch sử, không phải thay
+   * thế toàn bộ tài nguyên như PUT.
+   */
+  router.post('/tickets/:ticketId/transitions', async (req, res, next) => {
+    try {
+      const duLieu = kiemTraChuyenTrangThai(req.body || {});
+      const ketQua = await dichVuPhieu.chuyenTrangThai(Number(req.params.ticketId), duLieu);
+      return res.json({ data: ketQua });
+    } catch (loi) {
+      const daGui = guiLoi(res, loi);
+      if (daGui) return daGui;
+      return next(loi);
+    }
+  });
+
+  /**
+   * PUT /tickets/:ticketId — cập nhật nội dung phiếu (không đổi trạng thái).
+   */
   router.put('/tickets/:ticketId', async (req, res, next) => {
     try {
       const phieu = await dichVuPhieu.capNhatPhieu(Number(req.params.ticketId), req.body || {});
       return res.json({ data: phieu });
     } catch (loi) {
-      if (loi.code === 'PHIEU_KHONG_TON_TAI') return res.status(404).json({ error: loi.code, message: loi.message });
+      const daGui = guiLoi(res, loi);
+      if (daGui) return daGui;
       return next(loi);
     }
   });
 
+  /**
+   * DELETE /tickets/:ticketId — luôn bị từ chối (QT-13).
+   * Giữ endpoint để trả thông báo rõ ràng thay vì 404 khó hiểu.
+   */
   router.delete('/tickets/:ticketId', async (req, res, next) => {
     try {
       await dichVuPhieu.xoaPhieu(Number(req.params.ticketId));
       return res.status(204).send();
     } catch (loi) {
-      if (loi.code === 'PHIEU_KHONG_TON_TAI') return res.status(404).json({ error: loi.code, message: loi.message });
+      const daGui = guiLoi(res, loi);
+      if (daGui) return daGui;
       return next(loi);
     }
   });
