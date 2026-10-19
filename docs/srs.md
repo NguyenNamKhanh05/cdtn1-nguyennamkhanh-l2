@@ -78,14 +78,33 @@ Mekong Mobile đang tiếp nhận yêu cầu bảo hành bằng phiếu giấy n
 
 ## 5. Ràng buộc và quy tắc nghiệp vụ
 
-- **QT-01/QT-02:** Số điện thoại là duy nhất và phải chuẩn hóa về 10 chữ số bắt đầu bằng 0 trước khi lưu.
-- **QT-03:** Thiết bị được xác định duy nhất bằng serial hoặc IMEI và chỉ thuộc một khách hàng tại một thời điểm.
-- **QT-04:** Hạn cam kết là CAO 24 giờ, TRUNG_BINH 72 giờ, THAP 120 giờ; chỉ tính ngày làm việc từ thứ Hai đến thứ Bảy.
-- **QT-05:** Nếu không có ngày mua, phiếu phải đánh dấu chưa xác minh bảo hành và cần quản lý phê duyệt.
-- **QT-06:** Phiếu chỉ chuyển theo vòng đời hợp lệ; mọi lần chuyển phải ghi `ticket_status_log`, không quay lại trạng thái trước.
-- **QT-13:** Không xóa vật lý phiếu, chỉ đánh dấu ngừng sử dụng và giữ lịch sử.
-- **QT-14/QT-15:** Người dùng chỉ xem dữ liệu đúng đơn vị; số điện thoại hiển thị dạng che trừ quản lý và ban giám đốc.
-- **Mở rộng có kiểm soát:** `request_type` hiện nhận `BAO_HANH`; loại `DOI_TRA` là hướng mở rộng tương lai, chưa nằm trong phạm vi hiện thực BT1.
+### 5.1. Quy tắc trong phạm vi L2
+
+| Mã | Nội dung | Nơi hiện thực |
+|---|---|---|
+| QT-01 | Số điện thoại là duy nhất; khi trùng thì dùng lại hồ sơ cũ thay vì tạo bản ghi mới. | `customer.service.js` |
+| QT-02 | Số điện thoại phải chuẩn hóa về 10 chữ số bắt đầu bằng 0 (`+84`, `84`, khoảng trắng, dấu chấm đều quy về một dạng). | `domain/phone.js` |
+| QT-03 | Thiết bị xác định duy nhất bằng serial hoặc IMEI và chỉ thuộc một khách hàng tại một thời điểm. | `ticket.service.js` |
+| QT-04 | Hạn cam kết: CAO 24 giờ, TRUNG_BINH 72 giờ, THAP 120 giờ; chỉ tính thứ Hai đến thứ Bảy (bỏ Chủ nhật). | `domain/sla.js` |
+| QT-05 | Còn bảo hành nếu `ngày tiếp nhận − ngày mua ≤ số tháng bảo hành`. Thiếu ngày mua ⇒ **chưa xác minh**, cần quản lý phê duyệt (không được coi là hết hạn). | `domain/sla.js` |
+| QT-06 | Phiếu chỉ chuyển theo vòng đời hợp lệ, không quay lại trạng thái trước; mọi lần chuyển ghi `ticket_status_log`. | `domain/ticket-status.js`, `pg.repository.js` |
+| QT-13 | Không xóa vật lý phiếu hay khách hàng; chỉ đánh dấu `is_active = false` và giữ lịch sử. | `services/*.js` |
+| QT-14 | Nhân viên chỉ thấy dữ liệu trung tâm mình; quản lý thấy đơn vị mình; ban giám đốc thấy toàn công ty. | `middleware/ngu-canh.js` |
+| QT-15 | Số điện thoại hiển thị dạng che `090****567` với mọi vai trò trừ quản lý và ban giám đốc. | `domain/phone.js`, `middleware/ngu-canh.js` |
+
+### 5.2. Quy định bổ sung ngoài danh sách QT
+
+| Mã | Nội dung | Lý do |
+|---|---|---|
+| QD-01 | Một thiết bị không được có hai phiếu đang mở cùng lúc. | QT-06 cho phép một máy quay lại nhiều lần nên không thể đặt UNIQUE trên `device_id`; nhưng nếu mở trùng, hai kỹ thuật viên có thể sửa cùng một máy và lịch sử bảo hành sẽ sai. |
+
+### 5.3. Quy tắc ngoài phạm vi
+
+QT-07, QT-08, QT-09, QT-10, QT-11 và QT-12 thuộc các luồng khác (kho linh kiện, phân công kỹ thuật viên, báo cáo điều hành) nên **không** được hiện thực trong L2. Khi các luồng đó làm, quy tắc sẽ được bổ sung vào module tương ứng chứ không thêm vào đây.
+
+### 5.4. Mở rộng có kiểm soát
+
+`request_type` hiện nhận `BAO_HANH` và `DOI_TRA`. Thêm loại mới chỉ cần thêm giá trị cấu hình và cập nhật ràng buộc `CHECK`, không sửa luồng xử lý chính (FR6).
 
 ## 6. Bảng truy vết yêu cầu
 

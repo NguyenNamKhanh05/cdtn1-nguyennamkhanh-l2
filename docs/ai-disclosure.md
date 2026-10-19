@@ -5,7 +5,7 @@
 **Lớp:** [Điền tên lớp]
 **Luồng nghiệp vụ:** L2 - Tiếp nhận và phân loại yêu cầu bảo hành
 **Track:** Software Engineering (SE)
-**Ngày nộp:** 08/10/2026
+**Ngày nộp:** 19/10/2026
 
 | Công cụ | Dùng vào việc gì | Áp dụng ở phần nào | Đã kiểm chứng thế nào |
 |---|---|---|---|
@@ -16,6 +16,17 @@
 | GitHub Copilot/Copilot Chat | Hỗ trợ gợi ý mô hình dữ liệu và SQL DDL. | `docs/schema.sql`, `docs/erd.drawio`. | Kiểm tra bảng, khóa chính, khóa ngoại, ràng buộc và index; sau đó tự vẽ lại mô hình theo ý tưởng cá nhân. |
 | GitHub Copilot/Copilot Chat | Hỗ trợ gợi ý mô tả Use Case và kiến trúc. | `docs/usecase.md`, `docs/usecase.drawio`, `docs/architecture.md`, `docs/architecture.drawio`. | Đối chiếu và tự chỉnh sửa actor, use case, luồng ngoại lệ, các lớp kiến trúc và NFR. |
 | GitHub Copilot/Copilot Chat | Hỗ trợ gợi ý thiết kế wireframe và dữ liệu mẫu. | `docs/wireframe.md`,  `data/sample/`. | Kiểm tra có đủ 3 màn hình và các trường khớp với SRS, API và mô hình dữ liệu; sau đó tự vẽ lại bằng draw.io theo ý tưởng cá nhân. |
+| GitHub Copilot/Copilot Chat | Gợi ý cấu trúc 3 lớp (route – service – repository), khung validator và JSDoc cho hàm công khai. | `src/routes/`, `src/services/`, `src/repositories/`, `src/validators/`. | Đọc lại từng hàm, đối chiếu với QT-01..QT-06, QT-13..QT-15 trong `docs/srs.md`; chạy `npm test` (TC-01..TC-13) và `npm run demo` trên PostgreSQL thật. |
+| GitHub Copilot/Copilot Chat | Gợi ý công thức tính hạn cam kết bỏ Chủ nhật (QT-04) và hàm chuẩn hóa/che số điện thoại (QT-02, QT-15). | `src/domain/sla.js`, `src/domain/phone.js`. | Kiểm thử biên: thứ Bảy + 24h ra thứ Hai, ngày cuối bảo hành vẫn còn hạn; thử `+84`, `84`, dấu cách, dấu chấm. |
+| GitHub Copilot/Copilot Chat | Gợi ý script setup bằng Docker Compose và xử lý chờ CSDL sẵn sàng. | `docker-compose.yml`, `scripts/db.js`, `scripts/cho-db.js`, `scripts/run-sql.js`. | Chạy `npm run db:reset` rồi `npm run setup` trên máy sạch; chạy lại lần hai để kiểm tra không nhân đôi dữ liệu. |
+| GitHub Copilot/Copilot Chat | Gợi ý nội dung hướng dẫn kiểm thử Postman. | `docs/huong-dan-postman.md`. | Tự bấm lại từng request trong Postman và đối chiếu mã HTTP, body với tài liệu; chụp ảnh lưu trong `docs/export/`. |
+
+## Ghi chú về phạm vi sử dụng
+
+- Các quy tắc nghiệp vụ QT-01..QT-06, QT-13..QT-15 được lấy từ SRS của case study; AI chỉ hỗ trợ diễn đạt thành mã, không tự đặt ra quy tắc mới.
+- Quy định QD-01 (một thiết bị không có hai phiếu mở) do sinh viên bổ sung sau khi nhận thấy QT-06 cho phép một thiết bị quay lại nhiều lần; đã ghi rõ trong README và SRS là quy định bổ sung, không phải QT-09.
+- QT-07..QT-12 thuộc các luồng L4/L5/L8/L9 nên không hiện thực trong bài này.
+
 ## Cam kết của sinh viên
 
 Tôi xác nhận đã đọc, hiểu và chịu trách nhiệm về toàn bộ nội dung nộp. Tôi đã sử dụng GitHub Copilot/Copilot Chat như một công cụ hỗ trợ trong quá trình phân tích, thiết kế, lập trình và kiểm thử. Công cụ AI được sử dụng để gợi ý, tóm tắt, hỗ trợ viết mã và rà soát tài liệu; tôi không sử dụng kết quả một cách máy móc.
@@ -25,5 +36,5 @@ Tôi đã đọc lại, kiểm tra, đối chiếu và chỉnh sửa các nội 
 **Họ và tên:** Nguyễn Nam Khánh
 **MSSV:** 2374802010222
 **Lớp:** [Điền tên lớp]
-**Ngày nộp:** 08/10/2026
+**Ngày nộp:** 19/10/2026
 **Chữ ký:** ___________________________

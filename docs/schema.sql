@@ -65,6 +65,42 @@ CREATE INDEX idx_ticket_customer ON ticket(customer_id);
 CREATE INDEX idx_ticket_status_log_ticket ON ticket_status_log(ticket_id, changed_at);
 CREATE INDEX idx_customer_phone ON customer(phone);
 
+-- ---------------------------------------------------------------------------
+-- Phần bổ sung khi hiện thực BT2. Bản chạy thật nằm ở migrations/002 và 003;
+-- file này chỉ là bản tóm tắt để đọc cùng hồ sơ thiết kế.
+-- ---------------------------------------------------------------------------
+
+-- NFR3: chống tạo trùng phiếu khi client gửi lại cùng request_id.
+-- Dùng partial unique index để nhiều phiếu được phép có request_id NULL
+-- (phiếu nhập tay không cần khóa idempotency).
+ALTER TABLE ticket ADD COLUMN request_id VARCHAR(100);
+CREATE UNIQUE INDEX uq_ticket_request_id ON ticket(request_id) WHERE request_id IS NOT NULL;
+
+-- QT-14: lọc theo trung tâm là truy vấn thường xuyên.
+CREATE INDEX idx_ticket_active_status ON ticket(is_active, status, due_date);
+
+-- Danh mục bổ trợ: mã trung tâm và kỹ thuật viên (dữ liệu tham chiếu cho L4).
+ALTER TABLE service_center ADD COLUMN center_code VARCHAR(20);
+CREATE UNIQUE INDEX uq_service_center_code ON service_center(center_code) WHERE center_code IS NOT NULL;
+
+CREATE TABLE technician (
+  technician_id BIGSERIAL PRIMARY KEY,
+  technician_code VARCHAR(20) NOT NULL UNIQUE,
+  full_name VARCHAR(120) NOT NULL,
+  center_id BIGINT NOT NULL REFERENCES service_center(center_id),
+  level VARCHAR(20) NOT NULL CHECK (level IN ('SO_CAP', 'TRUNG_CAP', 'CAO_CAP')),
+  is_active BOOLEAN NOT NULL DEFAULT true
+);
+
+CREATE TABLE technician_skill (
+  technician_id BIGINT NOT NULL REFERENCES technician(technician_id) ON DELETE CASCADE,
+  category_id INT NOT NULL REFERENCES issue_category(category_id),
+  proficiency SMALLINT NOT NULL CHECK (proficiency BETWEEN 1 AND 5),
+  PRIMARY KEY (technician_id, category_id)
+);
+
+CREATE INDEX idx_technician_center ON technician(center_id);
+
 -- Data-model review against Buoi 5:
 -- 1NF: every column stores one scalar value; parts, status history and
 --     categories are not packed into comma-separated text.

@@ -16,7 +16,7 @@ HỆ THỐNG: Tiếp nhận và phân loại yêu cầu bảo hành (track SE)
 | TicketService - tạo phiếu, kiểm quy tắc bắt buộc               |
 | ClassifyService - chọn nhóm sự cố và mức ưu tiên               |
 | WarrantyService - kiểm tra hạn bảo hành, sinh hạn cam kết     |
-| >>> TOÀN BỘ quy tắc QT-01..QT-06 nằm trong lớp này <<<         |
+| >>> QUY TẮC QT-01..06, QT-13..15 NẰM TRONG LỚP NÀY <<<         |
 +----------------------------------------------------------------+
 | v gọi qua giao diện Repository                                 |
 +----------------------------------------------------------------+
@@ -42,7 +42,21 @@ phân công kỹ thuật viên theo thuật toán và báo cáo toàn công ty.
 | **3. Repository / DAO** | `CustomerRepository`, `DeviceRepository`, `TicketRepository` đọc/ghi dữ liệu, transaction và truy vấn có index. | Không chứa quy tắc nghiệp vụ hoặc gọi ngược Controller. |
 | **4. Data store** | PostgreSQL bảo đảm PK, FK, UNIQUE, NOT NULL, CHECK và lưu lịch sử trạng thái. | Không gọi ngược lên Service. |
 
-Phụ thuộc chỉ đi một chiều: `Presentation -> Business/Service -> Repository -> PostgreSQL`. Domain rules nằm trong Business/Service; Repository chỉ làm việc với dữ liệu. Luồng tạo phiếu là: `POST /api/v1/tickets` -> `TicketService.create()` -> repository transaction -> `ticket` và `ticket_status_log` -> HTTP 201. Nếu thiết bị hết hạn, Service trả lỗi miền và Presentation chuyển thành HTTP 422; không lớp nào nhảy cóc.
+Phụ thuộc chỉ đi một chiều: `Presentation -> Business/Service -> Repository -> PostgreSQL`. Domain rules nằm trong Business/Service; Repository chỉ làm việc với dữ liệu. Luồng tạo phiếu là: `POST /api/v1/tickets` -> `DichVuPhieu.taoPhieu()` -> repository transaction -> `ticket` và `ticket_status_log` -> HTTP 201. Nếu dữ liệu sai định dạng, Validator ném `DU_LIEU_KHONG_HOP_LE` và Presentation trả HTTP 400; nếu thiết bị hết hạn bảo hành, Service **vẫn tạo phiếu** với `is_warranty = false` (khách vẫn có quyền yêu cầu sửa chữa, chỉ là không miễn phí) và ghi nhận lý do — không lớp nào nhảy cóc.
+
+### Đối chiếu thiết kế với mã nguồn
+
+| Thành phần trong sơ đồ | Tệp hiện thực |
+|---|---|
+| Presentation (controller) | `src/routes/customer.routes.js`, `ticket.routes.js`, `catalog.routes.js` |
+| Kiểm tra đầu vào | `src/validators/ticket.validator.js` |
+| Business / Service | `src/services/ticket.service.js`, `customer.service.js` |
+| Domain thuần (SLA, vòng đời, số điện thoại) | `src/domain/sla.js`, `ticket-status.js`, `phone.js` |
+| Ngữ cảnh vai trò (QT-14, QT-15) | `src/middleware/ngu-canh.js` |
+| Repository | `src/repositories/pg.repository.js` và `memory.repository.js` |
+| Data store | `migrations/001..003` |
+
+Trong mã nguồn, ba service gợi ý ở sơ đồ (`TicketService`, `ClassifyService`, `WarrantyService`) được gộp thành `DichVuPhieu` cộng với hai module domain `sla.js` và `ticket-status.js`. Lý do gộp: cả ba dùng chung một tập dữ liệu phiếu, tách thành ba lớp sẽ phải truyền repository qua lại mà không tăng khả năng kiểm thử. Phần nào thực sự độc lập và thuần túy (tính hạn, chuyển trạng thái, chuẩn hóa số) thì đã tách ra `src/domain/` — đó là nơi unit test nhắm tới.
 
 ## Lập luận lựa chọn
 
