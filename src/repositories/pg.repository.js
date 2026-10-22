@@ -1,9 +1,9 @@
 /**
  * Repository PostgreSQL của luồng L2.
  *
- * Trách nhiệm: chỉ đọc/ghi dữ liệu. Mọi quy tắc nghiệp vụ (QT-xx) nằm ở lớp
- * Service — nếu đặt vào đây thì khi đổi sang CSDL khác sẽ phải viết lại quy tắc.
- *
+ * Trách nhiệm:ắc.
+ * chỉ đọc/ghi dữ liệu. Mọi quy tắc nghiệp vụ (QT-xx) nằm ở lớp
+ * Service — nếu đặt vào đây thì khi đổi sang CSDL khác sẽ phải viết lại quy t
  * Các thao tác ghi nhiều bảng (tạo phiếu + ghi log, chuyển trạng thái + ghi log)
  * đều nằm trong một transaction để bảo đảm NFR3: không bao giờ có phiếu mà
  * thiếu lịch sử.
@@ -260,8 +260,45 @@ class PhieuRepository {
    * @returns {Promise<object|null>}
    */
   async timPhieuTheoId(ticketId) {
-    const { rows } = await this.pool.query('SELECT * FROM ticket WHERE ticket_id = $1', [ticketId]);
+    // JOIN sẵn tên khách/trung tâm/nhóm sự cố để lớp hợp đồng (src/contracts)
+    // không phải gọi thêm ba truy vấn cho mỗi phiếu — tránh N+1 khi mở chi tiết.
+    // Dùng LEFT JOIN vì danh mục có thể bị ngừng sử dụng nhưng phiếu cũ vẫn còn.
+    const { rows } = await this.pool.query(
+      `SELECT t.*,
+              c.full_name  AS customer_name,
+              c.phone      AS customer_phone,
+              sc.center_name,
+              ic.category_name,
+              d.serial_no,
+              d.purchase_date,
+              d.warranty_months
+         FROM ticket t
+         LEFT JOIN customer c       ON c.customer_id = t.customer_id
+         LEFT JOIN service_center sc ON sc.center_id = t.center_id
+         LEFT JOIN issue_category ic ON ic.category_id = t.category_id
+         LEFT JOIN device d          ON d.device_id = t.device_id
+        WHERE t.ticket_id = $1`,
+      [ticketId],
+    );
     return rows[0] || null;
+  }
+
+  /**
+   * Liệt kê thiết bị của một khách hàng (màn hình tiếp nhận cần chọn thiết bị).
+   *
+   * @param {number} customerId Mã khách hàng.
+   * @returns {Promise<object[]>} Thiết bị của khách, sắp theo mã; mảng rỗng nếu
+   *   khách chưa có thiết bị (trạng thái rỗng hợp lệ, không phải lỗi).
+   */
+  async lietKeThietBiTheoKhachHang(customerId) {
+    // Bảng device KHÔNG có cột is_active (khác customer/ticket): thiết bị đã bán
+    // vẫn phải hiện để lập phiếu bảo hành. Đừng thêm điều kiện is_active ở đây —
+    // sẽ làm mọi khách đều hiện "chưa có thiết bị" trên PostgreSQL.
+    const { rows } = await this.pool.query(
+      'SELECT * FROM device WHERE customer_id = $1 ORDER BY device_id',
+      [customerId],
+    );
+    return rows;
   }
 
   /**
@@ -347,8 +384,19 @@ class PhieuRepository {
     const { rows } = await this.pool.query(
       `SELECT t.ticket_id, t.ticket_code, t.customer_id, t.device_id, t.center_id,
               t.request_type, t.issue_desc, t.category_id, t.priority, t.status,
-              t.received_at, t.due_date, t.closed_at, t.is_warranty
+              t.received_at, t.due_date, t.closed_at, t.is_warranty,
+              c.full_name  AS customer_name,
+              c.phone      AS customer_phone,
+              sc.center_name,
+              ic.category_name,
+              d.serial_no,
+              d.purchase_date,
+              d.warranty_months
          FROM ticket t
+         LEFT JOIN customer c        ON c.customer_id = t.customer_id
+         LEFT JOIN service_center sc ON sc.center_id = t.center_id
+         LEFT JOIN issue_category ic ON ic.category_id = t.category_id
+         LEFT JOIN device d          ON d.device_id = t.device_id
          ${where}
         ORDER BY t.due_date ASC, t.ticket_id ASC
         LIMIT $${thamSo.length + 1} OFFSET $${thamSo.length + 2}`,

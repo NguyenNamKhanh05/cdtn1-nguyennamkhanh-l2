@@ -109,7 +109,11 @@ class DichVuPhieu {
     if (duLieu.request_id) {
       const daXuLy = await this.repository.timPhieuTheoRequestId(duLieu.request_id);
       if (daXuLy) {
-        return { ...daXuLy, la_phieu_cu: true };
+        // Đọc lại qua `timPhieuTheoId` để có đủ trường JOIN (tên khách, trung
+        // tâm...). Nếu trả thẳng bản ghi thô, hợp đồng sẽ hiện tên rỗng đúng
+        // vào lúc người dùng gửi lại request do mất mạng.
+        const dayDu = await this.repository.timPhieuTheoId(daXuLy.ticket_id);
+        return { ...(dayDu || daXuLy), la_phieu_cu: true };
       }
     }
 
@@ -158,17 +162,22 @@ class DichVuPhieu {
       request_id: duLieu.request_id || null,
     });
 
+    // Đọc lại bản ghi kèm JOIN để hợp đồng trả đủ tên khách/trung tâm/serial
+    // ngay trong response 201 — giao diện hiển thị được ngay, không phải gọi
+    // thêm một request chi tiết.
+    const phieuDayDu = (await this.repository.timPhieuTheoId(phieu.ticket_id)) || phieu;
+
     // QT-05: thiếu ngày mua thì KHÔNG được im lặng coi là hết bảo hành. Trả
     // thêm cờ cảnh báo để giao diện biết cần quản lý phê duyệt. Cột is_warranty
     // vẫn là false vì DDL đặt NOT NULL; cờ này giữ lại ngữ nghĩa "chưa xác minh".
     if (ketQuaBaoHanh.conBaoHanh === null) {
       return {
-        ...phieu,
+        ...phieuDayDu,
         canh_bao_bao_hanh: ketQuaBaoHanh.lyDo,
         can_quan_ly_phe_duyet: true,
       };
     }
-    return phieu;
+    return phieuDayDu;
   }
 
   /**
@@ -227,7 +236,9 @@ class DichVuPhieu {
     await this.timPhieuTheoId(ticketId);
     const ketQua = await this.repository.capNhatPhieu(ticketId, duLieu);
     if (!ketQua) throw new AppError('PHIEU_KHONG_TON_TAI', 'Không tìm thấy phiếu.');
-    return ketQua;
+    // Đọc lại kèm JOIN để hợp đồng trả đủ tên khách/trung tâm sau khi sửa,
+    // giống response chi tiết — tránh giao diện hiện tên rỗng sau khi lưu.
+    return (await this.repository.timPhieuTheoId(ticketId)) || ketQua;
   }
 
   /**

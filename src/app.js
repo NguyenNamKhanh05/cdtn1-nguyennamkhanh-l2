@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('node:path');
 const { cauHinh } = require('./config/env');
 const { taoKetNoiPostgreSQL } = require('./config/database');
 const { PhieuRepository } = require('./repositories/pg.repository');
@@ -76,6 +77,27 @@ const DU_LIEU_MEM = {
       is_warranty: true,
     },
   ],
+  // Lịch sử trạng thái đi kèm để chế độ `memory` có cùng hành vi với seed
+  // PostgreSQL: mở chi tiết phiếu phải thấy log đầu tiên, không phải màn hình
+  // trống. Thiếu phần này sẽ khiến giao diện trông "hỏng" khi chấm bằng memory.
+  lichSus: [
+    {
+      log_id: 1, ticket_id: 1, from_status: null, to_status: 'MOI',
+      changed_at: '2026-10-19T02:00:00.000Z', changed_by: 1, note: 'Tiep nhan phieu moi',
+    },
+    {
+      log_id: 2, ticket_id: 2, from_status: null, to_status: 'MOI',
+      changed_at: '2026-10-18T02:00:00.000Z', changed_by: 1, note: 'Tiep nhan phieu moi',
+    },
+    {
+      log_id: 3, ticket_id: 2, from_status: 'MOI', to_status: 'DANG_XU_LY',
+      changed_at: '2026-10-18T03:00:00.000Z', changed_by: 2, note: 'Da phan cong ky thuat vien',
+    },
+    {
+      log_id: 4, ticket_id: 3, from_status: null, to_status: 'MOI',
+      changed_at: '2026-10-17T02:00:00.000Z', changed_by: 1, note: 'Tiep nhan phieu moi',
+    },
+  ],
 };
 
 /**
@@ -143,6 +165,11 @@ function createApp({ repository = null, cheDoDuLieu = null } = {}) {
   app.use('/', taoRouteKhachHang(dichVuKhachHang));
   app.use('/', taoRoutePhieu(dichVuPhieu));
   app.use('/', taoRouteDanhMuc(dichVuPhieu, duLieu));
+
+  // Giao diện tĩnh (React đã build sẵn trong public/). Đặt SAU route API để
+  // không nuốt các đường dẫn nghiệp vụ; dùng hash routing (#/tickets) nên
+  // không cần fallback cho mọi path — tránh phải duy trì thêm một rule.
+  app.use(express.static(path.join(__dirname, '..', 'public')));
 
   // 404 phải nằm sau toàn bộ route, nếu không sẽ "nuốt" mọi request.
   app.use((req, res) => {

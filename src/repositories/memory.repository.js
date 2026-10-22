@@ -20,11 +20,14 @@ class BoNhoRepository {
    * @param {object[]} [duLieuBanDau.nhomSuCos] Nhóm sự cố; bỏ trống thì dùng
    *   danh mục mặc định bên dưới.
    * @param {object[]} [duLieuBanDau.trungTams] Trung tâm; bỏ trống thì dùng mặc định.
+   * @param {object[]} [duLieuBanDau.lichSus] Lịch sử trạng thái có sẵn; dùng để
+   *   chế độ `memory` có cùng dữ liệu lịch sử với seed PostgreSQL.
    */
-  constructor({ khachHangs = [], thietBis = [], phieus = [], nhomSuCos = [], trungTams = [] } = {}) {
+  constructor({ khachHangs = [], thietBis = [], phieus = [], nhomSuCos = [], trungTams = [], lichSus = [] } = {}) {
     this.khachHangs = [...khachHangs];
     this.thietBis = [...thietBis];
     this.phieus = [...phieus];
+    this.lichSus = [...lichSus];
     // Danh mục mặc định để Service kiểm tra được `category_id`/`center_id` mà
     // test không phải dựng dữ liệu danh mục ở mọi chỗ.
     this.nhomSuCos = nhomSuCos.length > 0 ? [...nhomSuCos] : [
@@ -39,7 +42,6 @@ class BoNhoRepository {
       { center_id: 1, center_code: 'TT01', center_name: 'TTBH Quan 10', city: 'TP. Ho Chi Minh' },
       { center_id: 2, center_code: 'TT02', center_name: 'TTBH Tan Binh', city: 'TP. Ho Chi Minh' },
     ];
-    this.lichSus = [];
   }
 
   /** Không có tài nguyên cần đóng; giữ hàm để `server.js` gọi thống nhất. */
@@ -125,6 +127,16 @@ class BoNhoRepository {
     return thietBi;
   }
 
+  /**
+   * Thiết bị của một khách (màn hình tiếp nhận).
+   *
+   * @param {number} customerId
+   * @returns {Promise<object[]>} Mảng rỗng nếu khách chưa có thiết bị.
+   */
+  async lietKeThietBiTheoKhachHang(customerId) {
+    return this.thietBis.filter((t) => t.customer_id === customerId);
+  }
+
   // =================================================================== DANH MỤC
 
   /** @param {number} categoryId @returns {Promise<object|null>} */
@@ -154,9 +166,39 @@ class BoNhoRepository {
 
   // ===================================================================== PHIẾU
 
+  /**
+   * Gắn tên khách/trung tâm/nhóm sự cố/serial vào phiếu.
+   *
+   * Vì sao làm ở repository bộ nhớ: bản PostgreSQL dùng JOIN để trả cùng một
+   * hình dạng dữ liệu. Nếu bản bộ nhớ trả thiếu trường, giao diện sẽ hiện
+   * "undefined" khi chạy test mà vẫn đúng khi chạy Docker — đúng loại lỗi hợp
+   * đồng mà buổi 9 cảnh báo.
+   *
+   * @param {object} phieu Bản ghi phiếu thô.
+   * @returns {object} Bản sao có thêm các trường tra cứu.
+   * @private
+   */
+  _moRongPhieu(phieu) {
+    const khachHang = this.khachHangs.find((k) => k.customer_id === phieu.customer_id);
+    const trungTam = this.trungTams.find((t) => t.center_id === phieu.center_id);
+    const nhomSuCo = this.nhomSuCos.find((n) => n.category_id === phieu.category_id);
+    const thietBi = this.thietBis.find((t) => t.device_id === phieu.device_id);
+    return {
+      ...phieu,
+      customer_name: khachHang?.full_name ?? null,
+      customer_phone: khachHang?.phone ?? null,
+      center_name: trungTam?.center_name ?? null,
+      category_name: nhomSuCo?.category_name ?? null,
+      serial_no: thietBi?.serial_no ?? null,
+      purchase_date: thietBi?.purchase_date ?? null,
+      warranty_months: thietBi?.warranty_months ?? null,
+    };
+  }
+
   /** @param {number} ticketId @returns {Promise<object|null>} */
   async timPhieuTheoId(ticketId) {
-    return this.phieus.find((p) => p.ticket_id === ticketId) || null;
+    const phieu = this.phieus.find((p) => p.ticket_id === ticketId);
+    return phieu ? this._moRongPhieu(phieu) : null;
   }
 
   /** @param {string} requestId @returns {Promise<object|null>} */
@@ -193,7 +235,7 @@ class BoNhoRepository {
     ds = [...ds].sort((a, b) => new Date(a.due_date) - new Date(b.due_date));
     const total = ds.length;
     const batDau = (page - 1) * pageSize;
-    return { rows: ds.slice(batDau, batDau + pageSize), total };
+    return { rows: ds.slice(batDau, batDau + pageSize).map((p) => this._moRongPhieu(p)), total };
   }
 
   /**

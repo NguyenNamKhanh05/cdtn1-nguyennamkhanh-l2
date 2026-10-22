@@ -1,6 +1,12 @@
 const express = require('express');
 const { kiemTraTiepNhan, kiemTraBoLoc, kiemTraChuyenTrangThai } = require('../validators/ticket.validator');
 const { coTheXemTrungTam } = require('../middleware/ngu-canh');
+const {
+  toTicketView,
+  toTicketDetailView,
+  toTicketPage,
+  toHistoryView,
+} = require('../contracts/ticket.contract');
 
 /**
  * Route phiếu bảo hành.
@@ -69,9 +75,29 @@ function taoRoutePhieu(dichVuPhieu) {
   router.post('/tickets', async (req, res, next) => {
     try {
       const duLieu = kiemTraTiepNhan(req.body);
+      // QT-14: nhân viên chỉ được tạo phiếu cho trung tâm mình. Chặn ở đây thay
+      // vì tin vào giao diện — gọi thẳng API vẫn phải bị giới hạn.
+      if (req.nguCanh?.vaiTro === 'nhan_vien'
+        && req.nguCanh.centerId !== null
+        && duLieu.center_id !== req.nguCanh.centerId) {
+        return res.status(403).json({
+          error: { code: 'FORBIDDEN', message: 'Bạn chỉ được tạo phiếu cho trung tâm của mình.' },
+        });
+      }
       const phieu = await dichVuPhieu.taoPhieu(duLieu);
       const maHttp = phieu.la_phieu_cu ? 200 : 201;
-      return res.status(maHttp).json({ data: phieu });
+      // Trả qua hợp đồng để giao diện không phụ thuộc tên cột CSDL; giữ nguyên
+      // hai cờ cảnh báo QT-05 bằng cách trải chúng ra sau khi đã map.
+      return res.status(maHttp).json({
+        data: {
+          ...toTicketView(phieu, { vaiTro: req.nguCanh?.vaiTro }),
+          la_phieu_cu: Boolean(phieu.la_phieu_cu),
+          ...(phieu.canh_bao_bao_hanh ? {
+            canh_bao_bao_hanh: phieu.canh_bao_bao_hanh,
+            can_quan_ly_phe_duyet: phieu.can_quan_ly_phe_duyet,
+          } : {}),
+        },
+      });
     } catch (loi) {
       const daGui = guiLoi(res, loi);
       if (daGui) return daGui;
@@ -101,10 +127,11 @@ function taoRoutePhieu(dichVuPhieu) {
       }
 
       const { rows, total } = await dichVuPhieu.lietKePhieu(boLoc);
-      return res.json({
-        data: rows,
-        meta: { page: boLoc.page, page_size: boLoc.pageSize, total },
-      });
+      return res.json(toTicketPage(
+        { rows, total },
+        { page: boLoc.page, pageSize: boLoc.pageSize },
+        { vaiTro: nguCanh.vaiTro },
+      ));
     } catch (loi) {
       const daGui = guiLoi(res, loi);
       if (daGui) return daGui;
@@ -124,7 +151,13 @@ function taoRoutePhieu(dichVuPhieu) {
           error: { code: 'FORBIDDEN', message: 'Bạn không thuộc trung tâm của phiếu này.' },
         });
       }
-      return res.json({ data: phieu });
+      // Gộp lịch sử vào response chi tiết: màn hình chỉ cần một request, và
+      // QT-06 (các bước chuyển hợp lệ) được trả từ domain thay vì để giao diện
+      // tự đoán.
+      const lichSu = await dichVuPhieu.lichSuTrangThai(phieu.ticket_id);
+      return res.json({
+        data: toTicketDetailView(phieu, lichSu, { vaiTro: req.nguCanh?.vaiTro }),
+      });
     } catch (loi) {
       const daGui = guiLoi(res, loi);
       if (daGui) return daGui;
@@ -138,7 +171,7 @@ function taoRoutePhieu(dichVuPhieu) {
   router.get('/tickets/:ticketId/history', async (req, res, next) => {
     try {
       const lichSu = await dichVuPhieu.lichSuTrangThai(Number(req.params.ticketId));
-      return res.json({ data: lichSu });
+      return res.json({ data: lichSu.map(toHistoryView) });
     } catch (loi) {
       const daGui = guiLoi(res, loi);
       if (daGui) return daGui;
@@ -169,7 +202,7 @@ function taoRoutePhieu(dichVuPhieu) {
   router.put('/tickets/:ticketId', async (req, res, next) => {
     try {
       const phieu = await dichVuPhieu.capNhatPhieu(Number(req.params.ticketId), req.body || {});
-      return res.json({ data: phieu });
+      return res.json({ data: toTicketView(phieu, { vaiTro: req.nguCanh?.vaiTro }) });
     } catch (loi) {
       const daGui = guiLoi(res, loi);
       if (daGui) return daGui;

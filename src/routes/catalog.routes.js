@@ -50,6 +50,30 @@ function taoRouteDanhMuc(dichVuPhieu, repository) {
   });
 
   /**
+   * GET /customers/:customerId/devices — thiết bị của một khách (UC3, QT-03).
+   *
+   * Vì sao tách khỏi `GET /customers/:customerId`: màn hình tiếp nhận cần danh
+   * sách thiết bị để chọn, và phải phân biệt "khách chưa có thiết bị" (mảng
+   * rỗng, giao diện hiện trạng thái rỗng) với "khách không tồn tại" (404).
+   *
+   * @returns {Promise<void>}
+   */
+  router.get('/customers/:customerId/devices', async (req, res, next) => {
+    try {
+      const customerId = Number(req.params.customerId);
+      const khachHang = await repository.timKhachHangTheoId(customerId);
+      if (!khachHang) throw new AppError('KHACH_KHONG_TON_TAI', 'Không tìm thấy khách hàng.');
+      const thietBis = await repository.lietKeThietBiTheoKhachHang(customerId);
+      return res.json({ data: thietBis });
+    } catch (loi) {
+      if (loi.code === 'KHACH_KHONG_TON_TAI') {
+        return res.status(404).json({ error: { code: 'CUSTOMER_NOT_FOUND', message: loi.message } });
+      }
+      return next(loi);
+    }
+  });
+
+  /**
    * GET /devices/:deviceId — xem thông tin thiết bị.
    */
   router.get('/devices/:deviceId', async (req, res, next) => {
