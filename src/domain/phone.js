@@ -49,10 +49,10 @@ function cheSoDienThoai(phone) {
   const so = chuanHoaSoDienThoai(phone);
   if (!so) return phone;
 
-  // Giữ 6 số đầu, thay 4 số cuối bằng dấu *.
-  // Chấp nhận đánh đổi: 6 số đầu vẫn đủ để nhân viên đối chiếu nhanh với khách
-  // mà không lộ toàn bộ số.
-  return `${so.slice(0, 6)}****`;
+  // QT-15: giữ 3 số đầu và 3 số cuối, che 4 số giữa — đúng ví dụ `090****567`.
+  // Không che 4 số cuối vì như vậy vẫn lộ 6/10 chữ số, trong khi quy tắc chỉ
+  // cho phép nhận diện đầu số và đuôi để đối chiếu với khách.
+  return `${so.slice(0, 3)}****${so.slice(-3)}`;
 }
 
 module.exports = { chuanHoaSoDienThoai, cheSoDienThoai };

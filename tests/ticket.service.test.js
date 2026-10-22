@@ -102,8 +102,8 @@ async function chay() {
   assert.equal(chuanHoaSoDienThoai('090.123.4567'), '0901234567');
   assert.equal(chuanHoaSoDienThoai('12345'), null);
 
-  // TC-08 (QT-15): che 4 số cuối khi nhân viên xem.
-  assert.equal(cheSoDienThoai('0901234567'), '090123****');
+  // TC-08 (QT-15): che 4 số giữa, giữ đầu số và đuôi để đối chiếu.
+  assert.equal(cheSoDienThoai('0901234567'), '090****567');
 
   // TC-09 (QT-06): vòng đời trạng thái không quay lui, không nhảy cóc.
   assert.equal(coTheChuyen('MOI', 'DA_PHAN_CONG'), true);
@@ -153,6 +153,7 @@ async function chay() {
   assert.equal(phieuChuaXacMinh.canh_bao_bao_hanh, 'CHUA_XAC_MINH_BAO_HANH');
   assert.equal(phieuChuaXacMinh.can_quan_ly_phe_duyet, true);
 
+  console.log('[SO-TEST] 13');
   console.log('Service tests passed: TC-01 .. TC-13');
 }
 

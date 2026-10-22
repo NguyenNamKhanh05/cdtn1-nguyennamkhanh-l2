@@ -29,6 +29,8 @@ async function main() {
   assert.equal(body.status, 'ok');
 
   server.close();
+  console.log('[PASS] smoke-health GET /health tra 200');
+  console.log('[SO-TEST] 1');
   console.log('Smoke test passed: GET /health returns {"status":"ok"}');
 }
 
