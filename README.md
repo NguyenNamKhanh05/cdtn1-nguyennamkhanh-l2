@@ -20,6 +20,8 @@ Xây dựng một module nhỏ cho quy trình tiếp nhận bảo hành của Me
 
 ## 3. Hướng dẫn chạy từ đầu
 
+> **Người mới clone repo:** dùng cách ngắn ở **mục 11** (`npm install` → `npm run setup` → `npm start`) — không cần tạo `.env`. Ba lệnh dưới đây là quy trình thủ công tương đương, giữ lại từ BT1.
+
 ```bash
 npm install
 copy .env.example .env
@@ -29,26 +31,31 @@ npm test
 npm start
 ```
 
-Trên macOS/Linux, dùng `cp .env.example .env` thay cho lệnh `copy`. Có thể kiểm tra hệ thống tại `http://localhost:3000/health`.
+Trên macOS/Linux, dùng `cp .env.example .env` thay cho lệnh `copy`. Có thể kiểm tra hệ thống tại `http://localhost:3000/health`; giao diện 3 màn hình ở `http://localhost:3000/`.
 
 Các lệnh chính:
 
+- `npm run setup`: bật PostgreSQL bằng Docker, chạy migration và nạp dữ liệu mẫu — cách khuyến nghị.
 - `npm run migrate`: tạo bảng và index từ CSDL trống; migration có thể chạy lại.
 - `npm run seed`: nạp dữ liệu mẫu; seed dùng `ON CONFLICT` để không nhân đôi khi chạy lại.
-- `npm test`: chạy smoke test và ba unit test service.
-- `npm start`: khởi động API.
+- `npm test`: chạy **38 test** trong 4 nhóm (smoke, nghiệp vụ, hợp đồng, tích hợp HTTP) và in tổng số test đạt. Không cần Docker.
+- `npm start`: khởi động API và giao diện tại `http://localhost:3000`.
+- `npm run build:web`: build lại giao diện từ `web/src` sau khi sửa (không cần chạy khi chỉ chấm bài).
 
 ## 4. Cấu trúc thư mục
 - `src/`: mã nguồn ứng dụng.
 - `src/routes/`: nhận HTTP và dịch lỗi nghiệp vụ sang HTTP.
-- `src/services/`: quy tắc nghiệp vụ QT-03, QT-04, QT-05, QT-09.
+- `src/contracts/`: hợp đồng dữ liệu giữa nghiệp vụ và giao diện (Buổi 9).
+- `src/services/`: quy tắc nghiệp vụ QT-01…QT-06, QT-13…QT-15, QD-01.
 - `src/repositories/`: truy cập dữ liệu; bản bộ nhớ dùng cho demo và unit test.
 - `src/validators/`: kiểm tra kiểu, định dạng và trường bắt buộc.
 - `src/errors/`: lớp lỗi nghiệp vụ dùng chung.
+- `web/src/`: mã nguồn React của 3 màn hình (JSX + CSS).
+- `public/`: tệp build sẵn `index.html`, `app.js`, `app.css` — Express phục vụ trực tiếp.
 - `migrations/`: các bước tạo cấu trúc PostgreSQL.
 - `seeds/`: dữ liệu mẫu có thể nạp lại.
-- `tests/`: smoke test và unit test service.
-- `docs/`: minh chứng và ghi chú triển khai.
+- `tests/`: 4 nhóm test và `run-all.js` tổng hợp kết quả.
+- `docs/`: minh chứng, ảnh giao diện và ghi chú triển khai.
 - `data/sample/`: mẫu dữ liệu nhỏ được commit để kiểm thử.
 - `data/raw/`: dữ liệu gốc cục bộ, không commit.
 - `dataset/`: bộ dữ liệu đầy đủ của case study, chỉ dùng cục bộ.
@@ -58,27 +65,49 @@ Nguồn dữ liệu đầy đủ nằm trong thư mục `dataset/` và được 
 
 Repo chỉ commit các mẫu nhỏ trong `data/sample/`; không commit dữ liệu lớn. Khi cần chạy với dữ liệu đầy đủ, đặt các tệp CSV vào `data/raw/` hoặc dùng trực tiếp từ `dataset/` ở máy cá nhân.
 
-## 6. Trạng thái hiện tại (buổi 8)
+## 6. Trạng thái hiện tại (buổi 10)
 
 - [x] Migration `tickets`, `customers`, `devices`, `ticket_status_log`, `service_centers`, `issue_categories`, `technician`
 - [x] CRUD `/tickets`, `/customers` qua routes/services/repositories
 - [x] QT-09 không thuộc luồng L2 — thay bằng **QD-01** (một thiết bị không có hai phiếu đang mở)
-- [x] 13/13 test đạt: smoke test + TC-01..TC-13 (`npm test`)
+- [x] **38/38 test đạt**: smoke (1) + TC-01..TC-13 (13) + hợp đồng HD-01..HD-09 (9) + tích hợp HTTP E2E-01..E2E-15 (15)
 - [x] Docker Compose + `npm run setup` một lệnh, chạy lại an toàn
-- [ ] Ảnh minh chứng Postman trong `docs/export/` — đang chụp theo `docs/huong-dan-postman.md`
+- [x] Giao diện 3 màn hình (danh sách, chi tiết, tiếp nhận) gọi API thật, có đủ trạng thái đang tải / rỗng / lỗi
+- [x] Hợp đồng dữ liệu ở ranh giới (`src/contracts/ticket.contract.js`) + test hợp đồng
+- [x] 13 ảnh minh chứng giao diện trong `docs/export/` (`ui-01` … `ui-13`)
+- [x] README hướng dẫn chạy, kiểm thử và kiểm chứng trên bản clone mới
+- [ ] Ảnh Postman bổ sung (không bắt buộc nếu đã có ảnh giao diện) — quy trình ở `docs/huong-dan-postman.md`
 
 ## 7. Kiểm thử
 
-`npm test` chạy ba loại kiểm thử service:
+Chạy một lệnh, không cần Docker:
+
+```bash
+npm test
+# ... 38 dòng [PASS] tương ứng 4 nhóm ...
+# Tong ket: 38 test PASS (4 nhom test).
+```
+
+`npm test` gọi `tests/run-all.js`, lần lượt chạy 4 nhóm và **dừng ngay** nếu một nhóm lỗi:
+
+| Nhóm | Tệp | Số test | Kiểm tra |
+|---|---|---:|---|
+| Smoke | `tests/smoke-test.js` | 1 | App lắp ráp đúng, `GET /health` trả 200 |
+| Nghiệp vụ | `tests/ticket.service.test.js` | 13 | TC-01..TC-13: QT-01…QT-06, QT-13…QT-15, QD-01 |
+| Hợp đồng | `tests/ticket.contract.test.js` | 9 | HD-01..HD-09: hình dạng, ý nghĩa, giá trị rỗng của dữ liệu trả về |
+| Tích hợp HTTP | `tests/api.e2e.test.js` | 15 | E2E-01..E2E-15: luồng chính qua route, validator, middleware, hợp đồng |
+
+Chi tiết từng test, cách đọc kết quả và cách kiểm chứng trên bản clone mới ở **mục 15**. Bảng TC-01..TC-13 đầy đủ cũng nằm ở mục 15.3 (ba dòng TC-01..TC-03 dưới đây là ví dụ cũ, giữ lại để đối chiếu BT1):
 
 - `TC-01`: luồng đúng, thiết bị còn bảo hành tạo được phiếu.
 - `TC-02`: giá trị biên, ngày cuối còn bảo hành và ngày kế tiếp hết hạn.
-- `TC-03`: dữ liệu sai, serial đã có phiếu mở bị từ chối theo QT-09.
+- `TC-03`: dữ liệu sai, serial đã có phiếu mở bị từ chối theo QD-01.
 
 ## 8. Lộ trình các buổi
 - [x] Khởi tạo project, smoke test chạy được (buổi 2)
 - [x] Hoàn thiện hồ sơ phân tích và thiết kế BT1 cho luồng L2 (buổi 3)
 - [x] Module tiếp nhận yêu cầu (buổi 8–10)
+- [x] Giao diện 3 màn hình + tích hợp đầu-cuối + bộ test hợp đồng (buổi 10)
 - [ ] Module phân công kỹ thuật viên (buổi 10–12)
 
 ## 9. Hồ sơ BT1 đã thực hiện
@@ -94,6 +123,8 @@ Repo chỉ commit các mẫu nhỏ trong `data/sample/`; không commit dữ li�
 ## 10. Cấu trúc module BT2
 
 Routes chỉ xử lý HTTP và gọi Service. Service chứa quy tắc nghiệp vụ, không biết `req`, `res` hoặc mã HTTP. Repository chỉ đọc và ghi dữ liệu. Validator kiểm tra định dạng trước khi vào Service; PostgreSQL tiếp tục bảo vệ dữ liệu bằng `NOT NULL`, `UNIQUE`, khóa ngoại và `CHECK`.
+
+Từ Buổi 9 có thêm **lớp hợp đồng** (`src/contracts/`): route không trả thẳng bản ghi SQL mà chuyển qua `toTicketView` / `toTicketDetailView`. Giao diện chỉ đọc các trường đã cam kết, không phụ thuộc tên cột. Đây cũng là nơi duy nhất áp QT-15 cho số điện thoại gắn với phiếu và tính cờ quá hạn.
 
 ---
 
@@ -174,16 +205,19 @@ src/
 ├── server.js                  mở cổng, tắt server gọn gàng
 ├── config/                    đọc .env, tạo pool PostgreSQL
 ├── domain/                    quy tắc thuần: SLA, vòng đời trạng thái, số điện thoại
+├── contracts/ticket.contract.js  hợp đồng dữ liệu nghiệp vụ → giao diện
 ├── middleware/ngu-canh.js     ngữ cảnh vai trò cho QT-14/QT-15
 ├── routes/                    customer, ticket, catalog
 ├── services/                  ticket, customer
 ├── repositories/              pg.repository.js, memory.repository.js
 └── validators/                kiểm tra dữ liệu vào
+web/src/                       mã nguồn React (App, 3 màn hình, API client, CSS)
+public/                        index.html + app.js + app.css đã build sẵn
 migrations/                    DDL theo BT1, chạy được nhiều lần
 seeds/                         dữ liệu demo
-scripts/                       setup, seed, demo, tiện ích
-tests/                         smoke test + TC-01..TC-13
-docs/                          hồ sơ BT1 và minh chứng BT2
+scripts/                       setup, seed, demo, build giao diện
+tests/                         4 nhóm test + run-all.js (38 test)
+docs/                          hồ sơ BT1, ảnh giao diện, minh chứng BT2
 ```
 
 ## 14. Danh sách endpoint đầy đủ
@@ -204,6 +238,7 @@ Ví dụ nhanh (đường dẫn rút gọn, tương đương mục "API demo" c�
 | GET | `/health` | Kiểm tra API và kết nối CSDL |
 | GET | `/customers?phone=...` | Tra cứu khách (QT-02, QT-15) |
 | GET | `/customers/:id` | Xem hồ sơ khách |
+| GET | `/customers/:id/devices` | Thiết bị của khách (màn hình tiếp nhận) |
 | POST | `/customers` | Tạo khách mới (QT-01) |
 | PUT | `/customers/:id` | Cập nhật hồ sơ |
 | DELETE | `/customers/:id` | Ngừng sử dụng hồ sơ (QT-13) |
@@ -220,6 +255,16 @@ Ví dụ nhanh (đường dẫn rút gọn, tương đương mục "API demo" c�
 | GET | `/devices/:id` | Xem thiết bị |
 | POST | `/devices` | Ghi nhận thiết bị mới (QT-03) |
 
+Response của mọi endpoint phiếu đi qua `src/contracts/ticket.contract.js`. `GET /tickets/:id` trả thêm:
+
+- `lich_su`: mảng log trạng thái, mỗi dòng có nhãn tiếng Việt.
+- `chuyen_tiep_duoc_phep`: các bước kế tiếp theo QT-06 — giao diện không tự suy ra vòng đời.
+- `warranty_status`: `CON_BAO_HANH` / `HET_BAO_HANH` / `CHUA_XAC_MINH` (QT-05).
+- `is_overdue`: đã quá hạn cam kết và phiếu còn mở hay không.
+- `customer_phone`: đã che theo QT-15 nếu người xem là nhân viên.
+
+Giao diện 3 màn hình được phục vụ tại `http://localhost:3000/` (cùng process với API).
+
 ### 14.1. Phân quyền tạm thời bằng header
 
 Chưa có module đăng nhập, nên QT-14/QT-15 đọc vai trò từ header. Khi có JWT chỉ cần thay hàm `docNguCanh` trong `src/middleware/ngu-canh.js`.
@@ -231,11 +276,34 @@ Chưa có module đăng nhập, nên QT-14/QT-15 đọc vai trò từ header. Kh
 
 ## 15. Kiểm thử chi tiết
 
+### 15.1. Chạy và đọc kết quả
+
 ```bash
 npm test
-# Smoke test passed: GET /health returns {"status":"ok"}
-# Service tests passed: TC-01 .. TC-13
 ```
+
+Kết quả cuối cùng (số test có thể tăng khi bổ sung, nhưng cấu trúc dòng tổng kết không đổi):
+
+```text
+Tong ket: 38 test PASS (4 nhom test).
+```
+
+- Không cần Docker/PostgreSQL: cả 4 nhóm dùng repository bộ nhớ hoặc app dựng với `CHE_DO_DU_LIEU=memory`, nên chạy được trên máy chỉ có Node.
+- `tests/run-all.js` chạy lần lượt 4 tệp; tệp nào lỗi thì dừng ngay và in mã thoát khác 0 — không chạy tiếp trên trạng thái đã hỏng.
+- Mỗi tệp in các dòng `[PASS] <mã> <mô tả>`; cuối tệp in `[SO-TEST] N`. `run-all.js` cộng các dòng `[SO-TEST]` để ra tổng, không đếm dòng `[PASS]` (một test có thể có nhiều assert).
+
+### 15.2. Bốn nhóm test
+
+| Nhóm | Tệp | Số test | Kiểm tra điều gì |
+|---|---|---:|---|
+| Smoke | `tests/smoke-test.js` | 1 | App lắp ráp đúng, `GET /health` qua HTTP trả 200 |
+| Nghiệp vụ | `tests/ticket.service.test.js` | 13 | TC-01..TC-13: QT-01…QT-06, QT-13…QT-15, QD-01, NFR3/NFR4 |
+| Hợp đồng | `tests/ticket.contract.test.js` | 9 | HD-01..HD-09: hình dạng, ý nghĩa, giá trị rỗng, che số, quá hạn |
+| Tích hợp HTTP | `tests/api.e2e.test.js` | 15 | E2E-01..E2E-15: dựng app thật và đi hết luồng chính qua route/middleware/hợp đồng |
+
+Vì sao tách 4 nhóm: test nghiệp vụ không phát hiện lỗi route quên mount; test HTTP không chỉ ra quy tắc nào sai. Tách ra thì khi đỏ, tên nhóm cho biết lỗi nằm ở đâu.
+
+### 15.3. TC-01..TC-13 — quy tắc nghiệp vụ
 
 | Test | Nội dung |
 |---|---|
@@ -246,12 +314,147 @@ npm test
 | TC-05 | SLA 24/72/120 giờ |
 | TC-06 | Bỏ qua Chủ nhật khi tính hạn |
 | TC-07 | Chuẩn hóa số điện thoại (QT-02) |
-| TC-08 | Che số điện thoại (QT-15) |
+| TC-08 | Che số điện thoại `090****567` (QT-15) |
 | TC-09 | Vòng đời trạng thái không quay lui (QT-06) |
 | TC-10 | Chuyển trạng thái hợp lệ ghi log, không hợp lệ bị từ chối |
-| TC-11 | Cùng `request_id` không tạo phiếu thứ hai (NFR3) |
+| TC-11 | Cùng `request_id` không tạo phiếu thứ hai (NFR3/NFR4) |
 | TC-12 | Số điện thoại trùng không tạo hồ sơ mới (QT-01) |
 | TC-13 | Thiếu ngày mua ⇒ chưa xác minh bảo hành (QT-05) |
+
+### 15.4. HD-01..HD-09 — hợp đồng dữ liệu ở ranh giới
+
+Hợp đồng nằm ở `src/contracts/ticket.contract.js`. Đây là chỗ duy nhất biết response của phiếu có trường gì; route chỉ gọi `toTicketView` / `toTicketDetailView`.
+
+| Test | Nội dung |
+|---|---|
+| HD-01 | Hợp đồng có **đúng** bộ trường cam kết, không thừa/thiếu |
+| HD-02 | Ngày luôn ra ISO 8601; `null` giữ nguyên `null`, không thành `Invalid Date` |
+| HD-03 | QT-15: nhân viên thấy `090****567`, quản lý thấy `0901234567` |
+| HD-04 | QT-05: phân biệt `CON_BAO_HANH` / `HET_BAO_HANH` / `CHUA_XAC_MINH` |
+| HD-05 | Quá hạn chỉ tính cho phiếu còn mở; phiếu đã đóng không báo đỏ |
+| HD-06 | Log trạng thái có nhãn tiếng Việt, giao diện không phải tự dịch |
+| HD-07 | QT-06: chỉ trả các bước chuyển hợp lệ, lấy từ domain |
+| HD-08 | Metadata phân trang đúng tên trường và giữ `total` |
+| HD-09 | Đầu vào rỗng trả `null` thay vì ném lỗi |
+
+Hành vi ở biên mà bên gọi phải biết:
+
+| Tình huống | Kết quả | Bên gọi xử lý |
+|---|---|---|
+| `toTicketView(null)` | `null` | Tự quyết định hiển thị “không có dữ liệu” |
+| Danh sách rỗng | `data: []`, `meta.total: 0`, HTTP 200 | Trạng thái **rỗng**, không phải lỗi |
+| Ngày mua/ngày đóng không có | `null` | Hiển thị `—`; QT-05 suy ra `CHUA_XAC_MINH` |
+| Số điện thoại không có | `null` | Hiển thị `—`, không che thành chuỗi rỗng |
+| Ngày không hợp lệ từ CSDL | `null` | Không làm sập màn hình |
+| Lỗi nghiệp vụ | `{error: {code, message, fields?}}` | Rẽ nhánh theo `code`, không theo câu chữ |
+
+### 15.5. E2E-01..E2E-15 — luồng chính qua HTTP
+
+Test dựng app thật bằng `createApp`, nghe trên cổng 0 (hệ điều hành tự chọn), rồi gọi bằng `fetch`:
+
+| Test | Nội dung |
+|---|---|
+| E2E-01 | `/health` trả 200, đúng kho dữ liệu |
+| E2E-02 | `GET /tickets` trả 3 phiếu seed + `meta.total` + tên khách |
+| E2E-03 | QT-15: che số trên danh sách theo vai trò |
+| E2E-04 | Chi tiết kèm lịch sử và các bước chuyển QT-06 |
+| E2E-05 | QT-02: tra khách bằng số có khoảng trắng |
+| E2E-06 | QT-01: tạo khách mới, gửi trùng số bị 409 |
+| E2E-07 | Serial sai bị validator chặn với `DU_LIEU_KHONG_HOP_LE` |
+| E2E-08 | QT-03: tạo thiết bị mới cho khách |
+| E2E-09 | Tạo phiếu, QT-04 tính đúng hạn 24 giờ cho mức CAO |
+| E2E-10 | NFR4: gửi lại cùng `request_id` trả 200 + `la_phieu_cu: true` |
+| E2E-11 | QT-06: chuyển `MOI → DA_PHAN_CONG`, lịch sử tăng 1 dòng |
+| E2E-12 | QT-06: chuyển lùi bị 400 `INVALID_TRANSITION` |
+| E2E-13 | QT-13: xóa phiếu bị 409 `KHONG_DUOC_XOA_PHIEU` |
+| E2E-14 | Bộ lọc rỗng trả `[]` + `total: 0` (trạng thái rỗng) |
+| E2E-15 | Đường dẫn lạ trả 404 đúng định dạng lỗi chung |
+
+### 15.6. Cách thêm một test mới
+
+1. Chọn đúng nhóm: quy tắc nghiệp vụ → `ticket.service.test.js`; hình dạng dữ liệu → `ticket.contract.test.js`; đi qua HTTP → `api.e2e.test.js`.
+2. Đặt mã tiếp theo (`TC-14`, `HD-10`, `E2E-16`), viết `assert` với dữ liệu cố định — không dùng `new Date()` trực tiếp nếu test liên quan hạn chót.
+3. In `[PASS] <mã> <mô tả>` sau khi assert để người chấm thấy test nào đã chạy.
+4. Nếu thêm tệp test mới, thêm vào `CAC_TEP` trong `tests/run-all.js` và in `[SO-TEST] N`.
+5. Chạy `npm test`, xác nhận dòng tổng kết tăng đúng số test.
+
+### 15.7. Kiểm chứng trên bản clone mới
+
+Quy trình đã dùng để kiểm tra README (chạy trên thư mục tạm, không dùng `node_modules` cũ):
+
+```bash
+git clone https://github.com/NguyenNamKhanh05/cdtn1-nguyennamkhanh-l2.git
+cd cdtn1-nguyennamkhanh-l2
+npm install
+npm run setup
+npm test
+npm start
+```
+
+Kỳ vọng:
+
+- `npm install` không báo lỗi; không cần cài React/Vite (bundle đã commit trong `public/`).
+- `npm run setup` tạo container `mekong_mobile_db` ở cổng 5434, chạy 3 migration, nạp 6 trung tâm / 6 nhóm sự cố / 38 kỹ thuật viên / 3 phiếu.
+- `npm test` in `Tong ket: 38 test PASS (4 nhom test).`
+- `npm start` in `API dang chay tai http://localhost:3000`; mở `http://localhost:3000/` thấy màn hình chọn vai trò.
+
+Kết quả kiểm chứng thực tế: xem mục 15.8.
+
+### 15.8. Nhật ký kiểm chứng
+
+| Ngày | Việc đã làm | Kết quả |
+|---|---|---|
+| 22/10/2026 | `npm test` trên máy phát triển | 38/38 PASS |
+| 22/10/2026 | `npm run db:reset` → `npm run setup` từ volume trống | 3 migration + seed thành công |
+| 22/10/2026 | Mở giao diện, đi hết luồng tra khách → thêm thiết bị → tạo phiếu → chuyển trạng thái | Thành công; ảnh `ui-01`…`ui-13` |
+| 22/10/2026 | Clone repo sang thư mục tạm, chạy theo README | 38/38 PASS, giao diện mở được |
+
+### 15.9. Giao diện 3 màn hình và ba trạng thái
+
+Mở `http://localhost:3000/`, chọn vai trò ở màn hình đăng nhập mô phỏng:
+
+- **Nhân viên tiếp nhận** + trung tâm 1: thấy số che, chỉ thấy phiếu trung tâm mình (QT-14/QT-15).
+- **Quản lý trung tâm**: thấy số đầy đủ, lọc được theo trung tâm.
+- **Ban giám đốc**: thấy toàn công ty.
+
+| Màn hình | Đường dẫn | Chức năng |
+|---|---|---|
+| Danh sách | `#/tickets` | Lọc trạng thái/trung tâm, sắp theo hạn, đánh dấu quá hạn |
+| Chi tiết | `#/tickets/:id` | Thông tin, cảnh báo QT-05, chuyển trạng thái QT-06, lịch sử |
+| Tiếp nhận | `#/tiep-nhan` | Tra khách (QT-01/02), thêm thiết bị (QT-03), tạo phiếu (QT-04/05), chống trùng (NFR4) |
+
+Ba trạng thái bắt buộc (Buổi 9) được kiểm tra bằng ảnh:
+
+| Trạng thái | Cách tái hiện | Ảnh |
+|---|---|---|
+| Đang tải | Làm chậm mạng hoặc mở lại danh sách | `docs/export/ui-12-trang-thai-dang-tai.png` |
+| Rỗng | Lọc trạng thái `HOAN_TAT` khi chưa có phiếu | `docs/export/ui-10-trang-thai-rong.png` |
+| Lỗi | Tắt server rồi bấm Thử lại | `docs/export/ui-11-trang-thai-loi.png` |
+
+Ảnh toàn luồng:
+
+| Ảnh | Nội dung |
+|---|---|
+| `ui-01-dang-nhap.png` | Chọn vai trò (đăng nhập mô phỏng) |
+| `ui-02-danh-sach-nhan-vien.png` | Danh sách, số che `090****567` |
+| `ui-03-chi-tiet-phieu.png` | Chi tiết + lịch sử + bước chuyển |
+| `ui-04-tiep-nhan.png` | Màn hình tiếp nhận |
+| `ui-05-tra-cuu-khach.png` | Tra khách theo số |
+| `ui-06-them-thiet-bi.png` | Thêm thiết bị mới |
+| `ui-07-tiep-nhan-thanh-cong.png` | Tạo phiếu thành công + cảnh báo QT-05 |
+| `ui-08-chi-tiet-phieu-moi.png` | Chi tiết phiếu vừa tạo |
+| `ui-09-chuyen-trang-thai.png` | Chuyển `MOI → DA_PHAN_CONG` |
+| `ui-10-trang-thai-rong.png` | Trạng thái rỗng |
+| `ui-11-trang-thai-loi.png` | Trạng thái lỗi + nút thử lại |
+| `ui-12-trang-thai-dang-tai.png` | Trạng thái đang tải |
+| `ui-13-danh-sach-quan-ly.png` | Quản lý: số đầy đủ, toàn công ty |
+
+Ghi chú kỹ thuật giao diện:
+
+- React 19 + esbuild; mã nguồn ở `web/src`, bundle commit ở `public/app.js` + `public/app.css`. Không cần chạy dev server.
+- Sửa giao diện: sửa `web/src/**`, chạy `npm run build:web`, rồi tải lại trang.
+- API client duy nhất ở `web/src/api/client.js`: gắn header vai trò, chuẩn hóa lỗi, xóa phiên khi 401.
+- Hash routing để Express chỉ cần phục vụ tệp tĩnh, không phải viết rewrite SPA.
 
 ## 16. Xử lý sự cố
 
@@ -284,7 +487,7 @@ Các ảnh tối thiểu:
 1. `postman-01-health.png` — 200, `connected: true`
 2. `postman-02-danh-sach-phieu.png` — 3 phiếu, `total: 3`
 3. `postman-07-du-lieu-sai-400.png` — 400 `DU_LIEU_KHONG_HOP_LE`
-4. `postman-04-khach-hang-che-so.png` — `090123****`
+4. `postman-04-khach-hang-che-so.png` — `090****567`
 5. `postman-11-chuyen-trang-thai.png` — 200, `from_status` → `to_status`
 
 ## 19. Dữ liệu

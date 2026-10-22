@@ -147,14 +147,14 @@ Mong đợi: **200**
   "data": {
     "customer_id": 1,
     "full_name": "Nguyen Van Binh",
-    "phone": "090123****",
+    "phone": "090****567",
     "email": "binh@example.com",
     "address": "Can Tho"
   }
 }
 ```
 
-**Cần thấy trong ảnh:** `"phone": "090123****"` — 4 số cuối đã bị che theo QT-15.
+**Cần thấy trong ảnh:** `"phone": "090****567"` — 4 số giữa đã bị che theo QT-15.
 
 ### 4.2. Vai trò quản lý (số đầy đủ)
 
@@ -482,7 +482,7 @@ Chụp chung một ảnh cả ba (Postman hiển thị từng tab, có thể ch�
 | 1 | `postman-01-health.png` | 200, `connected: true` | ✔ |
 | 2 | `postman-02-danh-sach-phieu.png` | 3 phiếu, `total: 3` | ✔ |
 | 3 | `postman-03-loc-trang-thai.png` | Lọc `status=MOI` | |
-| 4 | `postman-04-khach-hang-che-so.png` | `090123****` | ✔ |
+| 4 | `postman-04-khach-hang-che-so.png` | `090****567` | ✔ |
 | 5 | `postman-05-khach-hang-quan-ly.png` | Số đầy đủ | ✔ |
 | 6 | `postman-06-chuan-hoa-so.png` | Nhập `090 123 4567` vẫn tìm ra | |
 | 7 | `postman-07-du-lieu-sai-400.png` | 400 `DU_LIEU_KHONG_HOP_LE` | ✔ |

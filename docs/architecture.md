@@ -49,6 +49,8 @@ Phụ thuộc chỉ đi một chiều: `Presentation -> Business/Service -> Repo
 | Thành phần trong sơ đồ | Tệp hiện thực |
 |---|---|
 | Presentation (controller) | `src/routes/customer.routes.js`, `ticket.routes.js`, `catalog.routes.js` |
+| Hợp đồng dữ liệu → giao diện | `src/contracts/ticket.contract.js` |
+| Giao diện 3 màn hình | `web/src/App.jsx`, `web/src/screens/*.jsx`, `web/src/api/client.js` |
 | Kiểm tra đầu vào | `src/validators/ticket.validator.js` |
 | Business / Service | `src/services/ticket.service.js`, `customer.service.js` |
 | Domain thuần (SLA, vòng đời, số điện thoại) | `src/domain/sla.js`, `ticket-status.js`, `phone.js` |

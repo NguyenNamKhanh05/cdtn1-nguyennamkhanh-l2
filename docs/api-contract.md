@@ -76,7 +76,7 @@ Tra cứu khách theo số điện thoại. QT-02 chuẩn hóa trước khi tra;
   "data": {
     "customer_id": 1,
     "full_name": "Nguyen Van Binh",
-    "phone": "090123****",
+    "phone": "090****567",
     "email": "binh@example.com",
     "address": "Can Tho",
     "is_active": true,
@@ -164,22 +164,33 @@ Tạo phiếu, lưu phân loại và mức ưu tiên, sinh hạn cam kết, ghi 
     "ticket_id": 4,
     "ticket_code": "BH-000004/2026",
     "customer_id": 1,
+    "customer_name": "Nguyen Van Binh",
+    "customer_phone": "090****567",
     "device_id": 13,
-    "center_id": 1,
+    "serial_no": "SN-90001",
+    "purchase_date": "2026-09-01T00:00:00.000Z",
+    "warranty_months": 12,
     "request_type": "BAO_HANH",
-    "issue_desc": "May tu tat nguon",
+    "center_id": 1,
+    "center_name": "TTBH Quan 10",
     "category_id": 3,
+    "category_name": "SAC",
+    "issue_desc": "May tu tat nguon",
     "priority": "CAO",
+    "priority_label": "Cao",
     "status": "MOI",
+    "status_label": "Mới tiếp nhận",
     "received_at": "2026-10-19T03:00:40.135Z",
     "due_date": "2026-10-20T03:00:40.135Z",
     "closed_at": null,
     "is_warranty": true,
-    "is_active": true,
-    "request_id": "verify-001"
+    "warranty_status": "CON_BAO_HANH",
+    "is_overdue": false
   }
 }
 ```
+
+Response đi qua `src/contracts/ticket.contract.js`. Các trường nội bộ như `request_id`, `is_active` **không** trả ra — chúng không thuộc hợp đồng với giao diện. `customer_phone` đã che theo QT-15; `warranty_status` giữ ba ý nghĩa của QT-05; `is_overdue` tính tại thời điểm phản hồi.
 
 **Response 200 khi gửi lại cùng `request_id`:** cùng phiếu, thêm `"la_phieu_cu": true`. Cố ý trả 200 chứ không phải 409: đây là retry hợp lệ của client, không phải lỗi.
 
@@ -243,17 +254,28 @@ Tạo phiếu, lưu phân loại và mức ưu tiên, sinh hạn cam kết, ghi 
       "ticket_id": 1,
       "ticket_code": "BH-000001/2026",
       "customer_id": 1,
+      "customer_name": "Nguyen Van Binh",
+      "customer_phone": "090****567",
       "device_id": 10,
-      "center_id": 1,
+      "serial_no": "SN-10293",
+      "purchase_date": "2026-03-01T00:00:00.000Z",
+      "warranty_months": 12,
       "request_type": "BAO_HANH",
-      "issue_desc": "May khong sac duoc",
+      "center_id": 1,
+      "center_name": "TTBH Quan 10",
       "category_id": 3,
+      "category_name": "SAC",
+      "issue_desc": "May khong sac duoc",
       "priority": "CAO",
+      "priority_label": "Cao",
       "status": "MOI",
+      "status_label": "Mới tiếp nhận",
       "received_at": "2026-10-19T07:57:22.756Z",
       "due_date": "2026-10-20T07:57:22.756Z",
       "closed_at": null,
-      "is_warranty": true
+      "is_warranty": true,
+      "warranty_status": "CON_BAO_HANH",
+      "is_overdue": false
     }
   ],
   "meta": { "page": 1, "page_size": 20, "total": 3 }
@@ -266,7 +288,16 @@ QT-14: khi request có `X-User-Role: nhan_vien` và `X-Center-Id`, hệ thống 
 
 ### 3.2. `GET /tickets/:ticketId` — US6
 
-Trả chi tiết phiếu. QT-14: nhân viên khác trung tâm nhận 403; `ban_giam_doc` xem mọi trung tâm.
+Trả chi tiết phiếu theo hợp đồng ở trên, cộng thêm:
+
+| Trường | Ý nghĩa |
+|---|---|
+| `lich_su` | Mảng log trạng thái cũ nhất trước, mỗi dòng có `from_label`, `to_label` |
+| `chuyen_tiep_duoc_phep` | `[{status, label}]` — các bước kế tiếp theo QT-06 |
+| `warranty_status` | `CON_BAO_HANH` / `HET_BAO_HANH` / `CHUA_XAC_MINH` (QT-05) |
+| `is_overdue` | Quá hạn cam kết và phiếu còn mở |
+
+QT-14: nhân viên khác trung tâm nhận 403; `ban_giam_doc` xem mọi trung tâm. Response gộp lịch sử để màn hình chi tiết chỉ cần một request.
 
 **Lỗi:** `404 RESOURCE_NOT_FOUND`, `403 FORBIDDEN`.
 
@@ -349,6 +380,11 @@ Luôn trả `409 KHONG_DUOC_XOA_PHIEU`. Endpoint tồn tại để thông báo r
 - `PUT`: cập nhật một phần; QT-01 vẫn kiểm tra trùng số.
 - `DELETE`: xóa mềm (QT-13), trả 204, bản ghi vẫn còn với `is_active = false`.
 
+**`GET /customers/:customerId/devices`** — thiết bị đang hoạt động của khách, dùng cho màn hình tiếp nhận.
+
+- `data` là mảng thiết bị; mảng rỗng là trạng thái **rỗng hợp lệ** (khách chưa có thiết bị), không phải lỗi.
+- 404 `CUSTOMER_NOT_FOUND` nếu khách không tồn tại hoặc đã ngừng sử dụng.
+
 ### 3.8. Thiết bị
 
 **`POST /devices`** — ghi nhận thiết bị trước khi lập phiếu (UC3).
@@ -398,6 +434,7 @@ Danh mục đọc từ CSDL chứ không hard-code trong mã (NFR4).
 | Endpoint | User Story | Use Case | MoSCoW | Yêu cầu |
 |---|---|---|---|---|
 | `GET /customers?phone=...` | US1 | UC1 | MUST | FR1, QT-01, QT-02, QT-15 |
+| `GET /customers/{id}/devices` | US3 | UC3 | MUST | FR3, QT-03 |
 | `POST /customers` | US2 | UC2 | MUST | FR2, QT-01 |
 | `POST /tickets` | US3, US4, US5 | UC3, UC4 | MUST | FR3, FR4, QT-03, QT-04, QT-05 |
 | `GET /tickets` | US6 | UC5 | SHOULD | FR5, QT-14 |
