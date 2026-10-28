@@ -456,6 +456,18 @@ Ghi chú kỹ thuật giao diện:
 - API client duy nhất ở `web/src/api/client.js`: gắn header vai trò, chuẩn hóa lỗi, xóa phiên khi 401.
 - Hash routing để Express chỉ cần phục vụ tệp tĩnh, không phải viết rewrite SPA.
 
+### 15.10. Ảnh minh chứng theo mục nộp
+
+Danh sách đầy đủ, xếp theo đúng ba mục của bài nộp, nằm ở `docs/minh-chung.md`:
+
+| Mục | Nội dung | Ảnh |
+|---|---|---|
+| MỤC 3 | Module cốt lõi — quy tắc nghiệp vụ đã hiện thực | `docs/export/postman-01…18*.png`, `docs/export/ui-01…09*.png` |
+| MỤC 4 | Bộ kiểm thử — ba trường hợp, kết quả PASS | `docs/export/test-01-npm-test-pass.png` |
+| MỤC 5 | Module mở rộng — ba trạng thái giao diện | `docs/export/ui-12-trang-thai-dang-tai.png`, `ui-10-trang-thai-rong.png`, `ui-11-trang-thai-loi.png` |
+
+Bộ sưu tập Postman dùng để chụp: `docs/postman/CDTN1-L2.postman_collection.json`.
+
 ## 16. Xử lý sự cố
 
 | Hiện tượng | Nguyên nhân thường gặp | Cách xử lý |

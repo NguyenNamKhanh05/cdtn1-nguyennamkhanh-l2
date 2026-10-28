@@ -1,0 +1,421 @@
+{
+  "info": {
+    "name": "CDTN1 - L2 - Nguyen Nam Khanh",
+    "description": "Bộ request Postman cho luồng L2 - Tiếp nhận và phân loại yêu cầu bảo hành. Chạy theo đúng thứ tự 01 → 18 sau khi đã chạy `npm run setup` và `npm start`.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "device_id", "value": "" },
+    { "key": "ticket_id", "value": "" },
+    { "key": "serial_no", "value": "" },
+    { "key": "request_id", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "01. GET /health",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('200 OK', () => pm.response.to.have.status(200));",
+              "pm.test('connected true', () => pm.expect(pm.response.json().connected).to.eql(true));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/health"
+      }
+    },
+    {
+      "name": "02. GET /tickets",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('200 OK', () => pm.response.to.have.status(200));",
+              "pm.test('3 phieu seed', () => pm.expect(pm.response.json().meta.total).to.eql(3));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/tickets"
+      }
+    },
+    {
+      "name": "03. GET /tickets?status=MOI",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('200 OK', () => pm.response.to.have.status(200));",
+              "pm.test('chi tra phieu MOI', () => {",
+              "  const rows = pm.response.json().data;",
+              "  pm.expect(rows.every((r) => r.status === 'MOI')).to.eql(true);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/tickets?status=MOI"
+      }
+    },
+    {
+      "name": "04. GET /customers?phone=... (nhan vien, che so)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('200 OK', () => pm.response.to.have.status(200));",
+              "pm.test('QT-15 che so', () => pm.expect(pm.response.json().data.phone).to.eql('090****567'));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "X-User-Role", "value": "nhan_vien" }],
+        "url": "{{baseUrl}}/customers?phone=0901234567"
+      }
+    },
+    {
+      "name": "05. GET /customers?phone=... (quan ly, so day du)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('200 OK', () => pm.response.to.have.status(200));",
+              "pm.test('QT-15 quan ly thay day du', () => pm.expect(pm.response.json().data.phone).to.eql('0901234567'));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "X-User-Role", "value": "quan_ly" }],
+        "url": "{{baseUrl}}/customers?phone=0901234567"
+      }
+    },
+    {
+      "name": "06. GET /customers?phone=090 123 4567 (QT-02)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('200 OK', () => pm.response.to.have.status(200));",
+              "pm.test('chuan hoa khoang trang', () => pm.expect(pm.response.json().data.full_name).to.eql('Nguyen Van Binh'));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/customers?phone=090%20123%204567"
+      }
+    },
+    {
+      "name": "07. POST /tickets du lieu sai - 400",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('400 Bad Request', () => pm.response.to.have.status(400));",
+              "pm.test('DU_LIEU_KHONG_HOP_LE', () => pm.expect(pm.response.json().error.code).to.eql('DU_LIEU_KHONG_HOP_LE'));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"serialNo\": \"\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": "{{baseUrl}}/tickets"
+      }
+    },
+    {
+      "name": "08. POST /devices - tao thiet bi",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "pm.collectionVariables.set('serial_no', 'SN-PM-' + Date.now());",
+              "pm.collectionVariables.set('request_id', 'postman-' + Date.now());"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('201 Created', () => pm.response.to.have.status(201));",
+              "pm.collectionVariables.set('device_id', pm.response.json().data.device_id);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"customer_id\": 1,\n  \"serial_no\": \"{{serial_no}}\",\n  \"purchase_date\": \"2026-09-01\",\n  \"warranty_months\": 12\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": "{{baseUrl}}/devices"
+      }
+    },
+    {
+      "name": "09. POST /tickets - tao phieu 201",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "if (!pm.collectionVariables.get('request_id')) {",
+              "  pm.collectionVariables.set('request_id', 'postman-' + Date.now());",
+              "}"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('201 Created', () => pm.response.to.have.status(201));",
+              "const body = pm.response.json().data;",
+              "pm.collectionVariables.set('ticket_id', body.ticket_id);",
+              "pm.test('trang thai MOI', () => pm.expect(body.status).to.eql('MOI'));",
+              "pm.test('QT-04 due_date cach 24 gio', () => {",
+              "  const received = new Date(body.received_at).getTime();",
+              "  const due = new Date(body.due_date).getTime();",
+              "  pm.expect(Math.round((due - received) / 3600000)).to.eql(24);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"customer_id\": 1,\n  \"device_id\": {{device_id}},\n  \"center_id\": 1,\n  \"category_id\": 3,\n  \"issue_desc\": \"May tu tat nguon\",\n  \"priority\": \"CAO\",\n  \"request_id\": \"{{request_id}}\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": "{{baseUrl}}/tickets"
+      }
+    },
+    {
+      "name": "10. POST /tickets gui lai - idempotent 200",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('200 OK', () => pm.response.to.have.status(200));",
+              "pm.test('la_phieu_cu', () => pm.expect(pm.response.json().data.la_phieu_cu).to.eql(true));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"customer_id\": 1,\n  \"device_id\": {{device_id}},\n  \"center_id\": 1,\n  \"category_id\": 3,\n  \"issue_desc\": \"May tu tat nguon\",\n  \"priority\": \"CAO\",\n  \"request_id\": \"{{request_id}}\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": "{{baseUrl}}/tickets"
+      }
+    },
+    {
+      "name": "11. POST /tickets/1/transitions - hop le",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('200 OK', () => pm.response.to.have.status(200));",
+              "pm.test('MOI -> DA_PHAN_CONG', () => pm.expect(pm.response.json().data.to_status).to.eql('DA_PHAN_CONG'));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"to_status\": \"DA_PHAN_CONG\",\n  \"note\": \"Da tiep nhan va phan cong\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": "{{baseUrl}}/tickets/1/transitions"
+      }
+    },
+    {
+      "name": "12. POST /tickets/1/transitions - chuyen sai 400",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('400 Bad Request', () => pm.response.to.have.status(400));",
+              "pm.test('INVALID_TRANSITION', () => pm.expect(pm.response.json().error.code).to.eql('INVALID_TRANSITION'));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"to_status\": \"DA_PHAN_CONG\",\n  \"note\": \"Da tiep nhan va phan cong\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": "{{baseUrl}}/tickets/1/transitions"
+      }
+    },
+    {
+      "name": "13. GET /tickets/1/history",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('200 OK', () => pm.response.to.have.status(200));",
+              "pm.test('2 dong lich su', () => pm.expect(pm.response.json().data.length).to.eql(2));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/tickets/1/history"
+      }
+    },
+    {
+      "name": "14. GET /tickets/3 - QT-14 sai trung tam 403",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('403 Forbidden', () => pm.response.to.have.status(403));",
+              "pm.test('FORBIDDEN', () => pm.expect(pm.response.json().error.code).to.eql('FORBIDDEN'));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "X-User-Role", "value": "nhan_vien" },
+          { "key": "X-Center-Id", "value": "1" }
+        ],
+        "url": "{{baseUrl}}/tickets/3"
+      }
+    },
+    {
+      "name": "15. DELETE /tickets/1 - QT-13 409",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('409 Conflict', () => pm.response.to.have.status(409));",
+              "pm.test('KHONG_DUOC_XOA_PHIEU', () => pm.expect(pm.response.json().error.code).to.eql('KHONG_DUOC_XOA_PHIEU'));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "body": {},
+        "url": "{{baseUrl}}/tickets/1"
+      }
+    },
+    {
+      "name": "16. GET /issue-categories",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('200 OK', () => pm.response.to.have.status(200));",
+              "pm.test('6 nhom su co', () => pm.expect(pm.response.json().data.length).to.eql(6));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/issue-categories"
+      }
+    },
+    {
+      "name": "17. GET /service-centers",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('200 OK', () => pm.response.to.have.status(200));",
+              "pm.test('6 trung tam', () => pm.expect(pm.response.json().data.length).to.eql(6));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/service-centers"
+      }
+    },
+    {
+      "name": "18. GET /technicians",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('200 OK', () => pm.response.to.have.status(200));",
+              "pm.test('38 ky thuat vien', () => pm.expect(pm.response.json().data.length).to.eql(38));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/technicians"
+      }
+    }
+  ]
+}
