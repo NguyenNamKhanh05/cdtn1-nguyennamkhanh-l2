@@ -33,6 +33,8 @@ npm start
 
 Trên macOS/Linux, dùng `cp .env.example .env` thay cho lệnh `copy`. Có thể kiểm tra hệ thống tại `http://localhost:3000/health`; giao diện 3 màn hình ở `http://localhost:3000/`.
 
+Cần **Node.js ≥ 20** và **Docker Desktop đang bật** cho `npm run setup`. Nếu cổng 5434 đang bận, máy chưa có Docker, hoặc muốn biết trước những gì cần chuẩn bị khi chấm, xem **mục 15.11 — Yêu cầu môi trường khi chấm bài**.
+
 Các lệnh chính:
 
 - `npm run setup`: bật PostgreSQL bằng Docker, chạy migration và nạp dữ liệu mẫu — cách khuyến nghị.
@@ -398,7 +400,9 @@ Kỳ vọng:
 - `npm test` in `Tong ket: 38 test PASS (4 nhom test).`
 - `npm start` in `API dang chay tai http://localhost:3000`; mở `http://localhost:3000/` thấy màn hình chọn vai trò.
 
-Kết quả kiểm chứng thực tế: xem mục 15.8.
+Lần kiểm chứng gần nhất (28/10/2026, clone từ GitHub vào thư mục tạm, volume CSDL trống):
+`npm install` 87 gói/23 giây → `npm run setup` tạo container + 3 migration + seed → `npm test` 38/38 PASS →
+chạy server ở cổng 3100: `/health` trả `connected: true`, `/api/v1/tickets` trả `total: 3`, `/` trả HTTP 200.
 
 ### 15.8. Nhật ký kiểm chứng
 
@@ -408,6 +412,7 @@ Kết quả kiểm chứng thực tế: xem mục 15.8.
 | 22/10/2026 | `npm run db:reset` → `npm run setup` từ volume trống | 3 migration + seed thành công |
 | 22/10/2026 | Mở giao diện, đi hết luồng tra khách → thêm thiết bị → tạo phiếu → chuyển trạng thái | Thành công; ảnh `ui-01`…`ui-13` |
 | 22/10/2026 | Clone repo sang thư mục tạm, chạy theo README | 38/38 PASS, giao diện mở được |
+| 28/10/2026 | Clone lại từ GitHub (`--depth 1`) vào thư mục tạm, xoá container cũ để kiểm tra như máy mới | `npm install` OK, `npm run setup` OK, `npm test` 38/38 PASS, `/health` `connected: true`, giao diện HTTP 200 |
 
 ### 15.9. Giao diện 3 màn hình và ba trạng thái
 
@@ -468,6 +473,24 @@ Danh sách đầy đủ, xếp theo đúng các mục của bài nộp, nằm �
 | MỤC 5 | Module mở rộng — ba trạng thái giao diện | `docs/export/ui-12-trang-thai-dang-tai.png`, `ui-10-trang-thai-rong.png`, `ui-11-trang-thai-loi.png` |
 
 Bộ sưu tập Postman dùng để chụp: `docs/postman/CDTN1-L2.postman_collection.json`.
+
+### 15.11. Yêu cầu môi trường khi chấm bài
+
+| Yêu cầu | Bắt buộc? | Nếu máy chưa đáp ứng |
+|---|---|---|
+| Node.js **≥ 20** | Có | Cài từ nodejs.org; kiểm tra bằng `node -v` |
+| Docker Desktop **đang bật** | Chỉ khi chạy `npm run setup` và `npm start` với PostgreSQL | Vẫn chấm được không cần Docker: `npm test` (dùng repository RAM) và `CHE_DO_DU_LIEU=memory npm start` |
+| Cổng **5434** trống | Có, nếu dùng Docker | Đổi cổng: thêm `DB_PORT=5435` vào `.env` rồi chạy lại `npm run setup` |
+| Cổng **3000** trống | Không bắt buộc | `PORT=3100 npm start` (PowerShell: `$env:PORT="3100"; npm start`) |
+| Container tên `mekong_mobile_db` chưa bị chiếm bởi dự án khác | Không bắt buộc | Chạy `npm run db:down` hoặc `docker rm -f mekong_mobile_db` rồi `npm run setup` |
+
+Lưu ý khi chấm:
+
+- **Không cần `npm run build:web`**: `public/app.js` và `public/app.css` đã build sẵn và commit, clone về là chạy được ngay.
+- npm bản mới có thể chặn postinstall của esbuild và in cảnh báo `allow-scripts`. Cảnh báo này **không ảnh hưởng** `npm test` và `npm start`; chỉ ảnh hưởng khi sửa `web/src` rồi build lại — khi đó chạy `npm approve-scripts` hoặc `npm install --foreground-scripts` trước.
+- `npm run setup` in tiến trình của Docker ra stderr nên PowerShell có thể tô đỏ; hãy xem **mã thoát** và dòng cuối `PostgreSQL dang chay tai cong 5434 (container mekong_mobile_db)` thay vì màu chữ.
+- `.env` không nằm trong repo (đã gitignore); giá trị mặc định trong `src/config/env.js` đã trùng `docker-compose.yml`, nên không cần tạo `.env` vẫn chạy được.
+- Kiểm chứng nhanh sau khi chạy: `curl http://localhost:3000/health` phải trả `{"status":"ok","database":"postgresql","connected":true}`.
 
 ## 16. Xử lý sự cố
 
