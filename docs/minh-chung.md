@@ -1,13 +1,25 @@
 # Minh chứng L2 — phân loại theo mục nộp
 
-Tài liệu này gom toàn bộ ảnh minh chứng đã chụp, xếp đúng ba mục của bài nộp:
+Tài liệu này gom toàn bộ ảnh minh chứng đã chụp, xếp đúng bốn mục của bài nộp:
 
+- **MỤC 2 — Kiến trúc đã hiện thực:** sơ đồ các thành phần thực tế.
 - **MỤC 3 — Module cốt lõi:** quy tắc nghiệp vụ đã hiện thực, ảnh chụp chạy được.
 - **MỤC 4 — Bộ kiểm thử:** ba trường hợp kiểm thử và ảnh chụp kết quả chạy PASS.
 - **MỤC 5 — Module mở rộng / trình bày kết quả:** ảnh chụp cả ba trạng thái đang tải, rỗng, lỗi.
 
 Mọi ảnh nằm trong `docs/export/`. Bộ sưu tập Postman dùng để chụp nằm ở
 `docs/postman/CDTN1-L2.postman_collection.json` (18 request, có script kiểm tra).
+
+---
+
+## MỤC 2. Kiến trúc đã hiện thực
+
+| Ảnh | Nội dung |
+|---|---|
+| `kien-truc-thuc-te.png` | Sơ đồ các thành phần **đang có trong mã nguồn**: React SPA → Express → validator/service/domain → repository (`pg` hoặc `memory`) → PostgreSQL 16 trong Docker; kèm bộ kiểm thử và công cụ |
+
+Giải thích từng tầng, tệp tương ứng và bảng so sánh với sơ đồ dự kiến của BT1:
+`docs/kien-truc.md`. Nguồn vẽ: `docs/kien-truc-thuc-te.html`.
 
 ---
 
@@ -84,7 +96,7 @@ Bốn nhóm test trong một lần chạy:
 | Smoke | `tests/smoke-test.js` | 1 | Ứng dụng lắp ráp đúng, `GET /health` trả 200 |
 | Nghiệp vụ | `tests/ticket.service.test.js` | 13 | TC-01…TC-13: QT-01…QT-06, QT-13…QT-15, QD-01 |
 | Hợp đồng | `tests/ticket.contract.test.js` | 9 | HD-01…HD-09: hình dạng, ý nghĩa, giá trị rỗng của dữ liệu trả về |
-| Tích hợp HTTP | `tests/e2e.test.js` | 15 | E2E-01…E2E-15: gọi thật qua HTTP |
+| Tích hợp HTTP | `tests/api.e2e.test.js` | 15 | E2E-01…E2E-15: gọi thật qua HTTP |
 
 ---
 

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<title>MỤC 2 — Kiến trúc đã hiện thực</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1920px; height: 1200px; overflow: hidden; }
+  body {
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    background: #eef1f6;
+    color: #16202c;
+    padding: 28px 34px 22px;
+    display: flex;
+    flex-direction: column;
+  }
+  .dau { display: flex; align-items: flex-end; justify-content: space-between; border-bottom: 3px solid #1f4e79; padding-bottom: 10px; margin-bottom: 16px; }
+  .dau h1 { font-size: 30px; letter-spacing: .2px; color: #12395e; }
+  .dau h1 span { color: #c0392b; }
+  .dau .phu { font-size: 15px; color: #4a5a6a; margin-top: 4px; }
+  .dau .nguon { text-align: right; font-size: 13px; color: #5b6b7c; line-height: 1.5; }
+  .than { flex: 1; display: grid; grid-template-columns: 1348px 1fr; gap: 20px; min-height: 0; }
+  .cot-trai { display: flex; flex-direction: column; gap: 0; }
+  .tang { display: grid; grid-template-columns: 74px 1fr; gap: 10px; }
+  .nhan-tang { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 12.5px; font-weight: 700; letter-spacing: 1.4px; color: #5d7b96; text-transform: uppercase; display: flex; align-items: center; justify-content: center; }
+  .hop-tang { background: #fff; border: 1.5px solid #cfd9e4; border-radius: 10px; padding: 12px 14px; box-shadow: 0 1px 2px rgba(20,40,70,.06); }
+  .hop-tang > h2 { font-size: 14.5px; color: #1f4e79; margin-bottom: 9px; font-weight: 700; }
+  .hop-tang > h2 em { font-style: normal; font-weight: 400; color: #6b7c8d; font-size: 12.5px; }
+  .hang { display: flex; gap: 10px; }
+  .hop { flex: 1; border: 1.3px solid #b9c7d6; border-radius: 8px; padding: 9px 11px; background: #fbfcfe; }
+  .hop .ten { font-size: 13.5px; font-weight: 700; color: #16202c; }
+  .hop .ten code { font-family: Consolas, "Courier New", monospace; font-size: 12px; color: #1f4e79; font-weight: 600; }
+  .hop .mo { font-size: 11.8px; color: #5a6b7c; line-height: 1.45; margin-top: 3px; }
+  .hop.nen-xanh { background: #eef6fd; border-color: #8fb6d8; }
+  .hop.nen-xam { background: #f4f6f8; }
+  .hop.nen-vang { background: #fdf8ec; border-color: #e0c48a; }
+  .hop.nen-la { background: #f0f8f1; border-color: #9fc9a6; }
+  .chip { display: inline-block; font-family: Consolas, monospace; font-size: 10.8px; padding: 2px 7px; border-radius: 11px; background: #e8eef5; color: #23415f; margin: 2px 4px 0 0; border: 1px solid #cfdbe7; }
+  .muiten { flex: 1; min-height: 34px; display: flex; align-items: center; justify-content: center; position: relative; }
+  .muiten::before { content: ""; width: 2px; height: 100%; background: #9fb1c3; }
+  .muiten::after { content: ""; position: absolute; bottom: 0; border-left: 7px solid transparent; border-right: 7px solid transparent; border-top: 10px solid #9fb1c3; }
+  .muiten .chu { position: absolute; left: 50%; transform: translateX(-50%); background: #eef1f6; padding: 0 8px; font-size: 11px; color: #6b7c8d; font-family: Consolas, monospace; }
+  .cot-phai { display: flex; flex-direction: column; gap: 12px; }
+  .the { background: #fff; border: 1.5px solid #cfd9e4; border-radius: 10px; padding: 11px 13px; box-shadow: 0 1px 2px rgba(20,40,70,.06); }
+  .the h2 { font-size: 14px; color: #1f4e79; margin-bottom: 7px; }
+  .the ul { list-style: none; }
+  .the li { font-size: 12.2px; color: #36485a; line-height: 1.5; padding-left: 13px; position: relative; }
+  .the li::before { content: "•"; position: absolute; left: 2px; color: #7d97ae; }
+  .the li code { font-family: Consolas, monospace; font-size: 11.4px; color: #1f4e79; }
+  .tong { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #4a5a6a; padding-top: 6px; border-top: 1px dashed #c9d4df; margin-top: 7px; }
+  .tong b { font-size: 15px; color: #1e7a45; }
+  .chan { margin-top: 10px; font-size: 11.6px; color: #64748b; display: flex; justify-content: space-between; }
+  .chan b { color: #33475b; }
+</style>
+</head>
+<body>
+  <div class="dau">
+    <div>
+      <h1>MỤC 2 — KIẾN TRÚC <span>ĐÃ HIỆN THỰC</span></h1>
+      <div class="phu">Sơ đồ các thành phần đang chạy trong mã nguồn L2 (không phải sơ đồ dự kiến của BT1)</div>
+    </div>
+    <div class="nguon">
+      Đối chiếu trực tiếp: <b>src/</b>, <b>web/src/</b>, <b>public/</b>, <b>tests/</b>, <b>docker-compose.yml</b><br />
+      Ứng dụng: Express 5 · React 19 · PostgreSQL 16 (Docker) · Node ≥ 20
+    </div>
+  </div>
+
+  <div class="than">
+    <div class="cot-trai">
+
+      <div class="tang">
+        <div class="nhan-tang">Trình bày</div>
+        <div class="hop-tang">
+          <h2>Trình duyệt — React 19 SPA <em>(web/src → build bằng esbuild → public/)</em></h2>
+          <div class="hang">
+            <div class="hop nen-xanh">
+              <div class="ten">Bốn màn hình React <code>web/src/screens</code></div>
+              <div class="mo">Login · List · Detail · Intake; hash routing <code>#/login · #/tickets · #/tickets/:id · #/tiep-nhan</code> trong <code>App.jsx</code></div>
+            </div>
+            <div class="hop nen-xanh">
+              <div class="ten">Tầng gọi API <code>web/src/api/client.js · tickets.js</code></div>
+              <div class="mo">Gắn header vai trò, chuẩn hóa lỗi, xóa phiên khi 401; dùng chung cho 3 màn hình</div>
+            </div>
+            <div class="hop nen-xam">
+              <div class="ten">Tệp tĩnh <code>public/index.html · app.js · app.css</code></div>
+              <div class="mo">Bundle đã build sẵn và commit — không cần dev server khi chấm bài</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="muiten"><span class="chu">HTTP/JSON · fetch</span></div>
+
+      <div class="tang">
+        <div class="nhan-tang">Giao tiếp</div>
+        <div class="hop-tang">
+          <h2>Lớp HTTP — Express 5 <em>(src/app.js, src/server.js)</em></h2>
+          <div class="hang" style="margin-bottom:8px">
+            <div class="hop nen-xam" style="flex:0 0 auto">
+              <div class="ten">Middleware theo thứ tự</div>
+              <div class="mo">
+                <span class="chip">express.json()</span><span class="chip">ganNguCanh</span>
+                <span class="chip">express.static(public)</span><span class="chip">404 NOT_FOUND</span>
+                <span class="chip">error handler</span>
+              </div>
+            </div>
+            <div class="hop nen-xam" style="flex:1">
+              <div class="ten">Định tuyến <code>/api/v1</code> + alias không phiên bản</div>
+              <div class="mo">
+                <span class="chip">customers</span><span class="chip">tickets</span><span class="chip">tickets/:id/history</span>
+                <span class="chip">tickets/:id/transitions</span><span class="chip">devices</span>
+                <span class="chip">issue-categories</span><span class="chip">service-centers</span><span class="chip">technicians</span>
+                <span class="chip">/health</span>
+              </div>
+            </div>
+          </div>
+          <div class="hang">
+            <div class="hop"><div class="ten"><code>ticket.routes.js</code></div><div class="mo">Tạo phiếu, danh sách, chi tiết, lịch sử, chuyển trạng thái, sửa, xóa (QT-13)</div></div>
+            <div class="hop"><div class="ten"><code>customer.routes.js</code></div><div class="mo">Tra cứu theo số (QT-01/QT-02), tạo/sửa/xóa hồ sơ</div></div>
+            <div class="hop"><div class="ten"><code>catalog.routes.js</code></div><div class="mo">Thiết bị (QT-03) và 3 danh mục: trung tâm, nhóm sự cố, kỹ thuật viên</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="muiten"><span class="chu">gọi hàm (không qua mạng)</span></div>
+
+      <div class="tang">
+        <div class="nhan-tang">Nghiệp vụ</div>
+        <div class="hop-tang">
+          <h2>Kiểm tra dữ liệu · Quy tắc · Hợp đồng</h2>
+          <div class="hang">
+            <div class="hop nen-vang">
+              <div class="ten">Validator <code>ticket.validator.js</code></div>
+              <div class="mo">Chặn dữ liệu sai trước khi chạm nghiệp vụ; lỗi trả mã <code>DU_LIEU_KHONG_HOP_LE</code></div>
+            </div>
+            <div class="hop nen-la">
+              <div class="ten">Service <code>ticket.service.js · customer.service.js</code></div>
+              <div class="mo">Điều phối QT-01…QT-06, QT-13…QT-15, QD-01; không biết dữ liệu nằm ở đâu</div>
+            </div>
+            <div class="hop nen-la">
+              <div class="ten">Miền nghiệp vụ <code>domain/</code></div>
+              <div class="mo"><code>sla.js</code> hạn 24/72/120 giờ, bỏ Chủ nhật · <code>phone.js</code> chuẩn hóa + che số · <code>ticket-status.js</code> đồ thị chuyển trạng thái</div>
+            </div>
+            <div class="hop">
+              <div class="ten">Hợp đồng & lỗi <code>contracts/ · errors/</code></div>
+              <div class="mo"><code>ticket.contract.js</code> ánh xạ cột CSDL → tên trường API; <code>AppError</code> giữ mã lỗi</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="muiten"><span class="chu">cùng một interface repository</span></div>
+
+      <div class="tang">
+        <div class="nhan-tang">Dữ liệu</div>
+        <div class="hop-tang">
+          <h2>Lớp truy cập dữ liệu — hai cài đặt thay thế được cho nhau <em>(cấu hình bằng CHE_DO_DU_LIEU)</em></h2>
+          <div class="hang">
+            <div class="hop nen-xanh">
+              <div class="ten"><code>pg.repository.js</code> — PostgreSQL</div>
+              <div class="mo">SQL thật qua <code>pg.Pool</code>; dùng khi chạy <code>npm start</code> mặc định</div>
+            </div>
+            <div class="hop nen-xam">
+              <div class="ten"><code>memory.repository.js</code> — RAM</div>
+              <div class="mo">Cùng interface; dùng cho <code>npm test</code> và <code>CHE_DO_DU_LIEU=memory npm start</code> khi không có Docker</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="muiten"><span class="chu">SQL · cổng 5434</span></div>
+
+      <div class="tang">
+        <div class="nhan-tang">Lưu trữ</div>
+        <div class="hop-tang">
+          <h2>PostgreSQL 16 trong Docker <em>(docker-compose.yml)</em></h2>
+          <div class="hang">
+            <div class="hop nen-xanh">
+              <div class="ten">Container <code>mekong_mobile_db</code></div>
+              <div class="mo">Cổng <b>5434 → 5432</b>, volume <code>mekong_pgdata</code>, healthcheck <code>pg_isready</code>, múi giờ Asia/Ho_Chi_Minh</div>
+            </div>
+            <div class="hop">
+              <div class="ten">Lược đồ <code>migrations/001…003</code></div>
+              <div class="mo">Bảng lõi · thêm <code>request_id</code> (NFR4) · bảng danh mục; chạy lại được</div>
+            </div>
+            <div class="hop">
+              <div class="ten">Dữ liệu mẫu <code>seeds/ · scripts/seed-catalog.js</code></div>
+              <div class="mo">3 phiếu demo, 6 trung tâm, 6 nhóm sự cố, 38 kỹ thuật viên; <code>ON CONFLICT</code> để không nhân đôi</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cot-phai">
+      <div class="the">
+        <h2>Bộ kiểm thử (chạy cùng tiến trình)</h2>
+        <ul>
+          <li><code>npm test</code> → <code>tests/run-all.js</code>, dừng ngay khi một nhóm lỗi</li>
+          <li>Smoke 1 · Nghiệp vụ 13 · Hợp đồng 9 · Tích hợp HTTP 15</li>
+          <li>Dùng <code>memory.repository</code> + <code>app.listen(0)</code> nên không cần Docker, không đụng cổng 3000</li>
+        </ul>
+        <div class="tong"><span>Tổng số test</span><b>38 PASS</b></div>
+      </div>
+
+      <div class="the">
+        <h2>Kiểm chứng qua HTTP thật</h2>
+        <ul>
+          <li><code>docs/postman/CDTN1-L2.postman_collection.json</code> — 18 request, có script kiểm tra</li>
+          <li>Gọi vào server thật ở <code>http://localhost:3000</code>, dữ liệu PostgreSQL</li>
+          <li>Ảnh minh chứng: <code>postman-01…18</code></li>
+        </ul>
+      </div>
+
+      <div class="the">
+        <h2>Khởi động & cấu hình</h2>
+        <ul>
+          <li><code>server.js</code>: mở cổng 3000, đóng pool khi nhận tín hiệu tắt</li>
+          <li><code>config/env.js</code>: đọc <code>.env</code>, có giá trị mặc định trùng <code>docker-compose.yml</code></li>
+          <li><code>config/database.js</code>: tạo <code>pg.Pool</code> dùng chung</li>
+          <li><code>scripts/db.js</code> + <code>cho-db.js</code>: bật/tắt/đặt lại Docker và chờ CSDL sẵn sàng</li>
+          <li><code>npm run setup</code> = db:up → chờ → migrate → seed</li>
+        </ul>
+      </div>
+
+      <div class="the">
+        <h2>Quy tắc đã hiện thực trong kiến trúc này</h2>
+        <ul>
+          <li>QT-01/02 tra khách · QT-03 thiết bị · QT-04 hạn cam kết · QT-05 bảo hành</li>
+          <li>QT-06 đồ thị trạng thái + log · QT-13 không xóa phiếu</li>
+          <li>QT-14 phạm vi trung tâm · QT-15 che số theo vai trò</li>
+          <li>NFR4 chống trùng bằng <code>request_id</code> · QD-01 xử lý trùng phiếu</li>
+        </ul>
+      </div>
+
+      <div class="the">
+        <h2>Khác sơ đồ dự kiến của BT1</h2>
+        <ul>
+          <li>Thêm <b>giao diện React</b> phục vụ ngay trong Express (BT1 chỉ có API)</li>
+          <li>Thêm <b>chế độ dữ liệu RAM</b> để chạy và chấm bài khi không có Docker</li>
+          <li>Thêm <b>request_id</b> + bảng danh mục (migration 002, 003) và <code>contract</code> ánh xạ cột → trường API</li>
+          <li>CSDL chạy trong <b>Docker cổng 5434</b> thay vì cài PostgreSQL trên máy</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="chan">
+    <span>Luồng một yêu cầu: Trình duyệt → <b>route</b> → <b>validator</b> → <b>service</b> → <b>repository</b> → <b>PostgreSQL</b>, kết quả quay lại theo <b>contract</b> để giao diện không phụ thuộc tên cột CSDL.</span>
+    <span>Nguyễn Nam Khánh · L2 · 2026</span>
+  </div>
+</body>
+</html>
