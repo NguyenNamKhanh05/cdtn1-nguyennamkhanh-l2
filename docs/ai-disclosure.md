@@ -5,7 +5,7 @@
 **Lớp:** [Điền tên lớp]
 **Luồng nghiệp vụ:** L2 - Tiếp nhận và phân loại yêu cầu bảo hành
 **Track:** Software Engineering (SE)
-**Ngày nộp:** 19/10/2026
+**Ngày nộp:** 28/10/2026
 
 | Công cụ | Dùng vào việc gì | Áp dụng ở phần nào | Đã kiểm chứng thế nào |
 |---|---|---|---|
@@ -51,5 +51,5 @@ Tôi đã đọc lại, kiểm tra, đối chiếu và chỉnh sửa các nội 
 **Họ và tên:** Nguyễn Nam Khánh
 **MSSV:** 2374802010222
 **Lớp:** [Điền tên lớp]
-**Ngày nộp:** 19/10/2026
+**Ngày nộp:** 28/10/2026
 **Chữ ký:** ___________________________
